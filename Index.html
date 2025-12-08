@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Festival Greetings</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f2f2f7;
+    }
+
+    /* Header */
+    header {
+        background: #4a4aff;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 28px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Search Box */
+    #search {
+        width: 80%;
+        max-width: 400px;
+        margin: 20px auto;
+        display: block;
+        padding: 12px 15px;
+        border-radius: 25px;
+        border: 2px solid #ccc;
+        font-size: 16px;
+        outline: none;
+    }
+
+    /* Grid Layout */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
+
+    /* Card */
+    .card {
+        background: white;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        transition: transform .2s ease;
+    }
+    .card:hover {
+        transform: scale(1.02);
+    }
+
+    .card h2 {
+        font-size: 20px;
+        margin: 0 0 5px;
+    }
+
+    .card p {
+        color: #555;
+        margin-bottom: 10px;
+    }
+
+    video {
+        width: 100%;
+        border-radius: 10px;
+    }
+</style>
+
+<script>
+    // Search Function
+    function searchFestivals() {
+        let input = document.getElementById("search").value.toLowerCase();
+        let cards = document.getElementsByClassName("card");
+
+        for (let i = 0; i < cards.length; i++) {
+            let title = cards[i].getElementsByTagName("h2")[0].innerText.toLowerCase();
+
+            if (title.includes(input)) {
+                cards[i].style.display = "block";
+            } else {
+                cards[i].style.display = "none";
+            }
+        }
+    }
+</script>
+</head>
+
+<body>
+
+<header>Festival Greetings</header>
+
+<input type="text" id="search" onkeyup="searchFestivals()" placeholder="Search festival...">
+
+<div class="grid">
+
+    <!-- New Year -->
+    <div class="card">
+        <h2>New Year</h2>
+        <p>Wishing you a prosperous and joyful year!</p>
+        <video controls src="newyear.mp4"></video>
+    </div>
+
+    <!-- Makar Sankranti -->
+    <div class="card">
+        <h2>Makar Sankranti / Pongal</h2>
+        <p>May the harvest season bring success and happiness.</p>
