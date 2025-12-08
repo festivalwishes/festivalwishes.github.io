@@ -69,13 +69,18 @@
     footer{padding:20px;text-align:center;color:var(--muted); font-size:14px}
 
     @media (max-width:640px){header{padding:12px} .container{padding:12px}}
-  </style>
+  @keyframes bgAnim {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+</style>
 </head>
 <body>
   <header>
     <div>
       <h1>Festival Wishes</h1>
-      <div class="sub">Multiple festivals • 10 videos & 10 cards per festival</div>
+      <div class="sub">Upcoming festival recommendations</div>
     </div>
     <div>
       <button class="btn" onclick="shareHomepage()">Share site</button>
@@ -137,7 +142,18 @@
   <script>
     // ====== DATA ======
     // Edit this `data` to set the festivals, their season, description and filenames.
-    const data = {
+    // Auto-detect upcoming festival by today's date
+const today = new Date();
+const month = today.getMonth()+1;
+let upcoming = 'Diwali'; // default
+if(month==12) upcoming='Christmas';
+if(month==1) upcoming='Makar Sankranti';
+if(month==3) upcoming='Holi';
+if(month==8) upcoming='Raksha Bandhan';
+if(month==10) upcoming='Navratri';
+if(month==11) upcoming='Diwali';
+
+const data = {
       seasons: [
         { id:'winter', title:'Winter', festivals: ['Christmas','New Year'] },
         { id:'spring', title:'Spring', festivals: ['Holi','Baisakhi'] },
@@ -279,7 +295,108 @@
     function shareHomepage(){ copyToClipboard(location.href); }
 
     // init
-    init();
+    // Set dynamic background based on upcoming festival
+(function(){
+  const bgMap={
+    'Diwali':'linear-gradient(135deg,#ffb74d,#ff9800,#f57c00)',
+    'Holi':'linear-gradient(135deg,#ff6ec7,#6ec6ff,#a8ff6e)',
+    'Christmas':'linear-gradient(135deg,#c62828,#2e7d32)',
+    'New Year':'linear-gradient(135deg,#000428,#004e92)',
+    'Raksha Bandhan':'linear-gradient(135deg,#ffd54f,#ffb300)',
+    'Navratri':'linear-gradient(135deg,#ff4081,#f50057)',
+    'Independence Day':'linear-gradient(135deg,#ff9933,#ffffff,#138808)',
+    'Baisakhi':'linear-gradient(135deg,#ffe082,#ffca28)',
+    'Makar Sankranti':'linear-gradient(135deg,#ffeb3b,#ffc107)' };
+  // Apply animated background
+const bg = bgMap[upcoming] || 'var(--page-bg)';
+document.body.style.background = bg;
+document.body.style.backgroundSize = '400% 400%';
+document.body.style.animation = 'bgAnim 12s ease infinite';
+})();
+
+init();
   </script>
+<script>
+// --- Festival Countdown ---
+(function(){
+ const dates={
+   'Diwali':'2025-10-20',
+   'Holi':'2025-03-14',
+   'Christmas':'2025-12-25',
+   'New Year':'2026-01-01',
+   'Raksha Bandhan':'2025-08-10',
+   'Navratri':'2025-09-22'
+ };
+ const target=new Date(dates[upcoming]||'2025-12-31');
+ const el=document.getElementById('countdown')||(()=>{
+    const d=document.createElement('div');
+    d.id='countdown';d.style='text-align:center;margin:10px;font-weight:600;';
+    document.body.prepend(d);return d;
+ })();
+ setInterval(()=>{
+   const now=new Date();
+   const diff=target-now;
+   if(diff<0){el.innerText='Today is '+upcoming+'!';return;}
+   const days=Math.floor(diff/86400000);
+   el.innerText=upcoming+' in '+days+' days';
+ },1000);
+})();
+
+// --- Background Image Layer (optional image per festival) ---
+(function(){
+ const img={
+   'Diwali':'media/bg/diwali.jpg',
+   'Holi':'media/bg/holi.jpg',
+   'Christmas':'media/bg/christmas.jpg'
+ }[upcoming];
+ if(img){
+   document.body.style.backgroundImage = `url(${img})`;
+   document.body.style.backgroundSize = 'cover';
+   document.body.style.backgroundAttachment='fixed';
+ }
+})();
+
+// --- Festival Music ---
+(function(){
+ const tracks={
+   'Diwali':'media/audio/diwali.mp3',
+   'Holi':'media/audio/holi.mp3',
+   'Christmas':'media/audio/christmas.mp3'
+ };
+ const src=tracks[upcoming];
+ if(src){
+   const a=new Audio(src);
+   a.loop=true;
+   a.volume=0.4;
+   a.play().catch(()=>{});
+ }
+})();
+
+// --- Particle Effect (simple floating shapes) ---
+(function(){
+ const c=document.createElement('canvas');
+ c.id='particles';
+ c.style='position:fixed;left:0;top:0;pointer-events:none;z-index:1;';
+ document.body.appendChild(c);
+ const ctx=c.getContext('2d');
+ function resize(){c.width=innerWidth;c.height=innerHeight;} resize();
+ const parts=Array.from({length:60},()=>({
+   x:Math.random()*c.width,
+   y:Math.random()*c.height,
+   s:2+Math.random()*3,
+   v:0.5+Math.random()*1
+ }));
+ function draw(){
+   ctx.clearRect(0,0,c.width,c.height);
+   ctx.fillStyle='rgba(255,255,255,0.8)';
+   parts.forEach(p=>{
+     ctx.beginPath();ctx.arc(p.x,p.y,p.s,0,Math.PI*2);ctx.fill();
+     p.y+=p.v; if(p.y>c.height) p.y=-10;
+   });
+   requestAnimationFrame(draw);
+ }
+ draw();
+})();
+</script>
 </body>
 </html>
