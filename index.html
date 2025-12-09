@@ -1,99 +1,541 @@
+<!doctype html>
+<!--
+  Festival Wishes - Advanced Single File Website (index.html)
+  ----------------------------------------------------------
+  How to use:
+  1) Save this file as `index.html` at the root of the repository named:
+       festivalwishes.github.io
+  2) Add media files under `media/<festival-id>/video-1.mp4`, `media/<festival-id>/card-1.jpg`, etc.
+     Example festival folder: media/diwali/video-1.mp4, media/diwali/card-1.jpg
+  3) Optional assets:
+       - media/bg/<festival-id>.jpg  (background image)
+       - media/audio/<festival-id>.mp3 (background music)
+       - media/preview.jpg (open graph / share preview)
+       - icon.png (apple-touch-icon and favicon)
+  4) Commit & push. In repo Settings → Pages ensure branch = main (root).
+  5) For Google: use Search Console verify (meta included), upload sitemap.xml & robots.txt as instructed.
+-->
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
 
+  <!-- Google Search Console verification (your code) -->
   <meta name="google-site-verification" content="gou6NtQJ0sljH3qP0KXDFa8crDuK8uQu0nxPFNFCVYI" />
 
-  <!-- ✅ Basic SEO -->
-  <title>Festival Wishes – Free Cards, Videos & Greetings</title>
-  <meta name="description" content="Download free festival greeting cards, videos and wishes for Diwali, Holi, Christmas, New Year and more. Daily updated festival greetings.">
+  <!-- Basic SEO -->
+  <title>Festival Wishes — Cards & Videos for Every Festival</title>
+  <meta name="description" content="Festival Wishes — free greeting cards, short videos and messages for Diwali, Holi, Christmas, Eid and more. Download and share." />
+  <meta name="keywords" content="festival wishes, greeting cards, festival videos, Diwali, Holi, Christmas, Eid, festival cards" />
+  <link rel="canonical" href="https://festivalwishes.github.io/" />
 
-  <!-- ✅ Canonical URL -->
-  <link rel="canonical" href="https://festivalwishes.github.io/Festival-wishes-/" />
+  <!-- OpenGraph / Social preview -->
+  <meta property="og:title" content="Festival Wishes — Free Cards & Videos" />
+  <meta property="og:description" content="Beautiful greeting cards and short videos for all festivals. Download and share with family." />
+  <meta property="og:url" content="https://festivalwishes.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://festivalwishes.github.io/media/preview.jpg" />
 
-  <!-- ✅ Open Graph (Facebook, WhatsApp share) -->
-  <meta property="og:title" content="Festival Wishes – Free Greeting Cards & Videos">
-  <meta property="og:description" content="Wish your loved ones with beautiful cards and videos for every festival.">
-  <meta property="og:url" content="https://festivalwishes.github.io/Festival-wishes-/">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://festivalwishes.github.io/Festival-wishes-/media/preview.jpg">
+  <!-- Twitter card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Festival Wishes — Free Cards & Videos" />
+  <meta name="twitter:description" content="Beautiful greeting cards and short videos for all festivals." />
+  <meta name="twitter:image" content="https://festivalwishes.github.io/media/preview.jpg" />
 
-  <!-- ✅ Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Festival Wishes – Free Greeting Cards & Videos">
-  <meta name="twitter:description" content="Wish your loved ones with beautiful cards and videos.">
-  <meta name="twitter:image" content="https://festivalwishes.github.io/Festival-wishes-/media/preview.jpg">
+  <meta name="robots" content="index, follow" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <link rel="apple-touch-icon" href="/icon.png" />
+  <link rel="icon" href="/icon.png" />
 
-  <!-- Prevent duplicate pages indexing -->
-  <meta name="robots" content="index, follow">
-
-  <!-- Faster Mobile Loading -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
-  <!-- Apple Touch Icon -->
-  <link rel="apple-touch-icon" href="/icon.png">
-
-  <!-- MAIN WEBSITE STYLE (your original CSS included unchanged below) -->
+  <!-- Minimal reset + layout + theme -->
   <style>
     :root{
       --accent:#ff6b35;
       --muted:#6b7280;
-      --card-bg:#ffffff;
-      --page-bg:#fffaf0;
+      --bg:#fffaf0;
+      --card-bg:#fff;
+      --glass: rgba(255,255,255,0.6);
+      --radius:12px;
+      --shadow: 0 8px 24px rgba(17,17,17,0.08);
+      --max-width:1100px;
     }
     *{box-sizing:border-box}
-    body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; margin:0; background:var(--page-bg); color:#111}
-    header{background:linear-gradient(90deg,var(--accent),#ff9f43); color:#fff; padding:18px 20px; display:flex; align-items:center; justify-content:space-between}
-    header h1{margin:0; font-size:20px}
-    header .sub{font-size:13px; opacity:.95}
-    .container{padding:20px; max-width:1100px; margin:0 auto}
-    .controls{display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px}
-    .btn{background:var(--accent); color:#fff; padding:10px 14px; border-radius:8px; border:none; cursor:pointer}
-    .btn.secondary{background:transparent; border:1px solid rgba(0,0,0,.08); color:#333}
-    .dropdown{padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,.06)}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+      -webkit-font-smoothing:antialiased;
+      background:var(--bg);
+      color:#111;
+      line-height:1.4;
+      overflow-x:hidden;
+      transition:background 1s ease;
+    }
 
-    /* seasonal tabs */
-    .tabs{display:flex; gap:10px; margin-bottom:16px; flex-wrap:wrap}
-    .tab{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.6);cursor:pointer;border:1px solid rgba(0,0,0,.03)}
-    .tab.active{background:#fff;border-color:rgba(0,0,0,.08);box-shadow:0 4px 12px rgba(0,0,0,.06)}
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 20px;
+      gap:12px;
+      background:linear-gradient(90deg,var(--accent),#ff9f43);
+      color:#fff;
+      position:sticky;
+      top:0;
+      z-index:40;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+    header .brand{display:flex;align-items:center;gap:12px}
+    header h1{margin:0;font-size:18px}
+    header p{margin:0;font-size:13px;opacity:.95}
+    .container{max-width:var(--max-width);margin:18px auto;padding:0 16px}
 
-    /* festival grid */
-    .festival-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px}
-    .festival-card{background:var(--card-bg); border-radius:12px; padding:12px; box-shadow:0 6px 18px rgba(17,17,17,.06); text-align:left}
-    .festival-card h3{margin:0 0 8px 0}
-    .festival-card p{margin:0;color:var(--muted); font-size:14px}
+    .controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+    .btn{background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;border:none;cursor:pointer;font-weight:600}
+    .btn.alt{background:transparent;color:#111;border:1px solid rgba(0,0,0,0.06)}
+    .select, input.search{padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,0.08)}
+    input.search{min-width:180px}
 
-    /* content area */
-    .page-title{display:flex;align-items:center;gap:12px;margin-top:6px}
-    .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
-    .video-box, .card-box{background:#fff;border-radius:10px;padding:10px;box-shadow:0 6px 18px rgba(17,17,17,.06)}
-    .video-box video{width:100%; border-radius:8px}
-    .card-box img{width:100%;height:170px;object-fit:cover;border-radius:8px}
-    .card-body{padding:8px}
-    .card-actions{display:flex;justify-content:space-between;align-items:center;padding-top:8px}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+    .tab{padding:8px 12px;border-radius:999px;background:var(--glass);cursor:pointer;border:1px solid rgba(0,0,0,0.03);font-weight:600}
+    .tab.active{background:#fff;box-shadow:var(--shadow)}
+
+    .festival-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+    .festival-card{background:var(--card-bg);border-radius:var(--radius);padding:14px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+    .festival-card img{width:100%;height:120px;object-fit:cover;border-radius:8px}
+    .festival-card h3{margin:0;font-size:16px}
+    .festival-card p{margin:0;color:var(--muted);font-size:13px}
+
+    .page{display:none}
+    .page.show{display:block}
+
+    .media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:8px}
+    .video-card, .card-item{background:var(--card-bg);border-radius:12px;padding:10px;box-shadow:var(--shadow);overflow:hidden}
+    .video-card video{width:100%;border-radius:8px;display:block}
+    .card-item img{width:100%;height:170px;object-fit:cover;border-radius:8px}
+    .card-actions{display:flex;gap:8px;justify-content:space-between;margin-top:8px}
+
+    .breadcrumbs{font-size:13px;color:var(--muted);margin-bottom:8px}
+
+    footer{padding:28px 16px;text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
 
     /* modal */
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:20px}
-    .modal .panel{background:#fff;border-radius:12px;max-width:980px;width:100%;max-height:90vh;overflow:auto}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:60;padding:18px}
     .modal.show{display:flex}
+    .modal .panel{background:#fff;border-radius:12px;max-width:980px;width:100%;max-height:90vh;overflow:auto;padding:12px}
 
-    footer{padding:20px;text-align:center;color:var(--muted); font-size:14px}
+    /* countdown badge */
+    #countdown{position:fixed;right:18px;bottom:18px;background:rgba(0,0,0,0.6);color:#fff;padding:10px 14px;border-radius:999px;font-weight:600;z-index:50}
 
-    @media (max-width:640px){header{padding:12px} .container{padding:12px}}
+    /* particles canvas */
+    #particles{position:fixed;left:0;top:0;pointer-events:none;z-index:10}
 
-    @keyframes bgAnim {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @media (max-width:640px){
+      header h1{font-size:16px}
+      .festival-card img{height:100px}
+      .container{padding:0 12px}
     }
   </style>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Website",
-  "name": "Festival Wishes",
-  "url": "https://festivalwishes.github.io/Festival-wishes-/",
-  "description": "Free greeting cards, videos, and festival wishes for all Indian festivals."
-}
-</script>
+
+  <!-- Structured data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Website",
+    "name": "Festival Wishes",
+    "url": "https://festivalwishes.github.io/",
+    "description": "Free greeting cards and short videos for Diwali, Holi, Christmas, Eid and more."
+  }
+  </script>
 </head>
+
+<body>
+  <header>
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden><rect width="24" height="24" rx="6" fill="#fff" opacity="0.12"/><path d="M6 12c0-3.314 2.686-6 6-6v12c-3.314 0-6-2.686-6-6z" fill="#fff" opacity="0.9"/></svg>
+      <div>
+        <h1>Festival Wishes</h1>
+        <p style="margin-top:2px;font-size:12px;opacity:.95">Cards • Videos • Greetings</p>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="btn" onclick="shareHomepage()">Share</button>
+      <button class="btn alt" onclick="openSettings()">Settings</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- HOMEPAGE -->
+    <section id="homePage" class="page show">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <div>
+          <div id="seasonTabs" class="tabs" aria-hidden></div>
+          <div class="breadcrumbs" id="homeHint">Discover festival cards and videos by season</div>
+        </div>
+
+        <div class="controls">
+          <select id="filterSelect" class="select" onchange="applyFilter()">
+            <option value="all">All festivals</option>
+            <option value="popular">Popular</option>
+          </select>
+          <input id="q" class="search" placeholder="Search festival..." oninput="renderFestivals()" />
+        </div>
+      </div>
+
+      <div id="festivals" class="festival-grid" style="margin-top:14px"></div>
+    </section>
+
+    <!-- FESTIVAL PAGE -->
+    <section id="festivalPage" class="page">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px">
+        <div>
+          <button class="btn alt" onclick="goHome()">← Back</button>
+          <h2 id="festivalTitle" style="display:inline-block;margin-left:12px"></h2>
+          <div id="festivalDesc" style="color:var(--muted);margin-top:6px"></div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button class="btn" onclick="downloadCards()">Download all cards</button>
+          <button class="btn alt" onclick="openSettings()">Settings</button>
+        </div>
+      </div>
+
+      <h3>Videos</h3>
+      <div id="videoGrid" class="media-grid"></div>
+
+      <h3 style="margin-top:18px">Cards</h3>
+      <div id="cardGrid" class="media-grid"></div>
+    </section>
+
+  </main>
+
+  <div id="previewModal" class="modal" onclick="closeModal(event)">
+    <div class="panel" onclick="event.stopPropagation()">
+      <div id="modalContent"></div>
+      <div style="text-align:right;margin-top:8px"><button class="btn alt" onclick="closeModal()">Close</button></div>
+    </div>
+  </div>
+
+  <div id="countdown" aria-hidden></div>
+
+  <canvas id="particles"></canvas>
+
+  <footer>
+    © <span id="year"></span> Festival Wishes — made with ❤️ · Upload media to <code>media/&lt;festival-id&gt;/</code>
+  </footer>
+
+  <!-- MAIN SCRIPT -->
+  <script>
+    // ---------- Config & Data ----------
+    const SITE_URL = 'https://festivalwishes.github.io/';
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    // simple upcoming festival based on month (adjust or replace with accurate dates)
+    let upcoming = 'Diwali';
+    if (month === 12) upcoming = 'Christmas';
+    if (month === 1) upcoming = 'Makar Sankranti';
+    if (month === 3) upcoming = 'Holi';
+    if (month === 8) upcoming = 'Raksha Bandhan';
+    if (month === 10) upcoming = 'Navratri';
+    if (month === 11) upcoming = 'Diwali';
+
+    // festivals data (id used for media folder)
+    const FESTIVALS = {
+      'Diwali': buildFestival('diwali','Festival of Lights',10),
+      'Holi': buildFestival('holi','Festival of Colours',10),
+      'Christmas': buildFestival('christmas','Christmas Celebrations',10),
+      'New Year': buildFestival('newyear','New Year Wishes',10),
+      'Raksha Bandhan': buildFestival('raksha','Celebrate Siblings',10),
+      'Independence Day': buildFestival('independence','National Day',10),
+      'Navratri': buildFestival('navratri','Navratri Festival',10),
+      'Eid': buildFestival('eid','Eid Greetings',10),
+      'Ganesh Chaturthi': buildFestival('ganesh','Ganesh Festival',10),
+      'Baisakhi': buildFestival('baisakhi','Harvest Festival',10)
+    };
+
+    function buildFestival(id, desc, n){
+      const videos = [], cards = [];
+      for(let i=1;i<=n;i++){
+        videos.push(`media/${id}/video-${i}.mp4`);
+        cards.push(`media/${id}/card-${i}.jpg`);
+      }
+      return {id, description: desc, videos, cards};
+    }
+
+    // seasons (map festivals to seasons)
+    const SEASONS = [
+      {id:'winter', title:'Winter', festivals:['Christmas','New Year']},
+      {id:'spring', title:'Spring', festivals:['Holi','Baisakhi']},
+      {id:'summer', title:'Summer', festivals:['Raksha Bandhan','Independence Day']},
+      {id:'autumn', title:'Autumn', festivals:['Diwali','Navratri','Ganesh Chaturthi']}
+    ];
+
+    // ---------- UI references ----------
+    const seasonTabs = document.getElementById('seasonTabs');
+    const festivalsEl = document.getElementById('festivals');
+    const qInput = document.getElementById('q');
+    const homePage = document.getElementById('homePage');
+    const festivalPage = document.getElementById('festivalPage');
+    const festivalTitle = document.getElementById('festivalTitle');
+    const festivalDesc = document.getElementById('festivalDesc');
+    const videoGrid = document.getElementById('videoGrid');
+    const cardGrid = document.getElementById('cardGrid');
+    const previewModal = document.getElementById('previewModal');
+    const modalContent = document.getElementById('modalContent');
+    const countdownEl = document.getElementById('countdown');
+    const particlesCanvas = document.getElementById('particles');
+
+    let activeSeason = SEASONS[0].id;
+
+    // ---------- Initialization ----------
+    document.getElementById('year').textContent = new Date().getFullYear();
+    renderSeasonTabs();
+    renderFestivals();
+    applyThemeForUpcoming();
+    startCountdown();
+    initParticles();
+
+    // ---------- Render season tabs ----------
+    function renderSeasonTabs(){
+      seasonTabs.innerHTML = '';
+      SEASONS.forEach(s=>{
+        const d = document.createElement('div');
+        d.className = 'tab' + (s.id===activeSeason ? ' active' : '');
+        d.textContent = s.title;
+        d.onclick = ()=>{ activeSeason = s.id; renderSeasonTabs(); renderFestivals(); };
+        seasonTabs.appendChild(d);
+      });
+      // highlight upcoming festival's season
+      const upSeason = SEASONS.find(s=> s.festivals.includes(upcoming));
+      if(upSeason){
+        // small highlight label
+        const hint = document.getElementById('homeHint');
+        hint.textContent = `Upcoming: ${upcoming} — find cards & videos below`;
+      }
+    }
+
+    // ---------- Render festivals on homepage ----------
+    function renderFestivals(){
+      const q = qInput.value.trim().toLowerCase();
+      festivalsEl.innerHTML = '';
+      const season = SEASONS.find(s=>s.id===activeSeason);
+      const list = season ? season.festivals : Object.keys(FESTIVALS);
+      list.forEach(name=>{
+        if(!FESTIVALS[name]) return;
+        if(q && !name.toLowerCase().includes(q)) return;
+        const f = FESTIVALS[name];
+        const card = document.createElement('div');
+        card.className = 'festival-card';
+        const img = document.createElement('img');
+        // try to use first card image, otherwise placeholder
+        img.src = `media/${f.id}/card-1.jpg`;
+        img.onerror = ()=>{ img.src = placeholderCardSVG(); };
+        const h = document.createElement('h3'); h.textContent = name;
+        const p = document.createElement('p'); p.textContent = f.description;
+        const actions = document.createElement('div');
+        actions.style.marginTop = '10px';
+        actions.innerHTML = `<button class="btn" onclick="openFestival('${name}')">Open</button>
+                             <button class="btn alt" onclick="copyToClipboard('${SITE_URL}#${f.id}')">Share</button>`;
+        card.appendChild(img); card.appendChild(h); card.appendChild(p); card.appendChild(actions);
+        festivalsEl.appendChild(card);
+      });
+    }
+
+    // ---------- Open festival page ----------
+    function openFestival(name){
+      const fest = FESTIVALS[name];
+      if(!fest) return alert('Festival data missing');
+      homePage.classList.remove('show');
+      festivalPage.classList.add('show');
+      festivalTitle.textContent = name;
+      festivalDesc.textContent = fest.description;
+
+      // populate videos
+      videoGrid.innerHTML = '';
+      fest.videos.forEach((src,idx)=>{
+        const vcard = document.createElement('div'); vcard.className='video-card';
+        const video = document.createElement('video'); video.controls = true;
+        const source = document.createElement('source'); source.src = src; source.type = 'video/mp4';
+        video.appendChild(source);
+        video.onerror = ()=>{ /* video missing: show placeholder */ };
+        const caption = document.createElement('div'); caption.style.marginTop='8px';
+        caption.innerHTML = `<strong>Video ${idx+1}</strong>`;
+        const actions = document.createElement('div'); actions.className='card-actions';
+        const preview = document.createElement('button'); preview.className='btn alt'; preview.textContent='Preview'; preview.onclick = ()=>openModal(`<video controls autoplay style="width:100%;height:auto;border-radius:8px"><source src="${src}" type="video/mp4"></video>`);
+        const download = document.createElement('button'); download.className='btn'; download.textContent='Download'; download.onclick = ()=>downloadFile(src);
+        actions.appendChild(download); actions.appendChild(preview);
+        vcard.appendChild(video); vcard.appendChild(caption); vcard.appendChild(actions);
+        videoGrid.appendChild(vcard);
+      });
+
+      // populate cards
+      cardGrid.innerHTML = '';
+      fest.cards.forEach((src,idx)=>{
+        const card = document.createElement('div'); card.className='card-item';
+        const img = document.createElement('img'); img.src = src; img.alt = `Card ${idx+1}`;
+        img.onerror = ()=>{ img.src = placeholderCardSVG(); };
+        const body = document.createElement('div'); body.style.padding='8px';
+        const title = document.createElement('div'); title.textContent = `Wish ${idx+1}`; title.style.fontWeight='700';
+        const actions = document.createElement('div'); actions.className='card-actions';
+        const share = document.createElement('button'); share.className='btn'; share.textContent='Share'; share.onclick = ()=>copyToClipboard(`${SITE_URL}#${src}`);
+        const preview = document.createElement('button'); preview.className='btn alt'; preview.textContent='Preview'; preview.onclick = ()=>openModal(`<img src="${src}" style="width:100%;height:auto;border-radius:8px" />`);
+        actions.appendChild(share); actions.appendChild(preview);
+        body.appendChild(title); body.appendChild(actions);
+        card.appendChild(img); card.appendChild(body);
+        cardGrid.appendChild(card);
+      });
+
+      // change page background for festival
+      applyThemeForFestival(fest.id);
+      // update URL hash for direct linking
+      history.replaceState(null, '', `#${fest.id}`);
+    }
+
+    function goHome(){
+      festivalPage.classList.remove('show');
+      homePage.classList.add('show');
+      // reset background
+      applyThemeForUpcoming();
+      history.replaceState(null,'', '/');
+    }
+
+    // ---------- Helpers ----------
+    function placeholderCardSVG(){
+      return 'data:image/svg+xml;utf8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#f3e9dd"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#caa37a" font-size="22">Image not found</text></svg>`);
+    }
+
+    function copyToClipboard(text){
+      navigator.clipboard?.writeText(text).then(()=>alert('Link copied to clipboard'));
+    }
+
+    function downloadFile(url){
+      // simple client side download
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = url.split('/').pop();
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    function openModal(html){
+      modalContent.innerHTML = html;
+      previewModal.classList.add('show');
+    }
+    function closeModal(e){
+      if(!e || e.target === previewModal) previewModal.classList.remove('show');
+    }
+
+    // ---------- Theme & Background ----------
+    const BG_MAP = {
+      'diwali':'linear-gradient(135deg,#ffb74d,#ff9800,#f57c00)',
+      'holi':'linear-gradient(135deg,#ff6ec7,#6ec6ff,#a8ff6e)',
+      'christmas':'linear-gradient(135deg,#1b5e20,#c62828)',
+      'newyear':'linear-gradient(135deg,#000428,#004e92)',
+      'raksha':'linear-gradient(135deg,#ffd54f,#ffb300)',
+      'independence':'linear-gradient(135deg,#ff9933,#ffffff,#138808)',
+      'navratri':'linear-gradient(135deg,#ff4081,#f50057)',
+      'eid':'linear-gradient(135deg,#a5d6a7,#66bb6a)',
+      'ganesh':'linear-gradient(135deg,#ffcc80,#ff8a65)',
+      'baisakhi':'linear-gradient(135deg,#ffe082,#ffca28)'
+    };
+
+    function applyThemeForUpcoming(){
+      // attempt to choose a festival id for upcoming
+      const festId = (FESTIVALS[upcoming] && FESTIVALS[upcoming].id) || Object.values(FESTIVALS)[0].id;
+      applyThemeForFestival(festId);
+    }
+
+    function applyThemeForFestival(festId){
+      const bg = BG_MAP[festId] || 'linear-gradient(90deg,#fff7e6,#ffe4b5)';
+      document.body.style.background = bg;
+      document.body.style.backgroundSize = '400% 400%';
+      document.body.style.animation = 'bgAnim 12s ease infinite';
+      // optional background image if available
+      const imgUrl = `media/bg/${festId}.jpg`;
+      // pre-check image exists by creating Image and listening error
+      const img = new Image();
+      img.onload = ()=>{ document.body.style.backgroundImage = `url(${imgUrl})`; document.body.style.backgroundSize='cover'; document.body.style.backgroundBlendMode='overlay'; }
+      img.onerror = ()=>{ /* no bg image - ignore */ }
+      img.src = imgUrl;
+      // change particle style or count per festival (optional)
+    }
+
+    // ---------- Countdown ----------
+    const FEST_DATES = {
+      'Diwali':'2025-10-20',
+      'Holi':'2025-03-14',
+      'Christmas':'2025-12-25',
+      'New Year':'2026-01-01',
+      'Raksha Bandhan':'2025-08-10',
+      'Navratri':'2025-09-22'
+    };
+    function startCountdown(){
+      updateCountdown();
+      setInterval(updateCountdown, 1000);
+    }
+    function updateCountdown(){
+      const dateStr = FEST_DATES[upcoming] || Object.values(FEST_DATES)[0];
+      const target = new Date(dateStr);
+      const now = new Date();
+      const diff = target - now;
+      if(isNaN(target) || diff < 0){
+        countdownEl.textContent = `${upcoming} is near!`;
+        return;
+      }
+      const days = Math.floor(diff/86400000);
+      const hours = Math.floor((diff%86400000)/3600000);
+      const mins = Math.floor((diff%3600000)/60000);
+      const secs = Math.floor((diff%60000)/1000);
+      countdownEl.textContent = `${upcoming} in ${days}d ${hours}h ${mins}m ${secs}s`;
+    }
+
+    // ---------- Particles (simple) ----------
+    function initParticles(){
+      const c = particlesCanvas;
+      const ctx = c.getContext('2d');
+      function resize(){ c.width = innerWidth; c.height = innerHeight; }
+      resize(); window.addEventListener('resize', resize);
+      const parts = Array.from({length:60}, ()=>({ x: Math.random()*c.width, y: Math.random()*c.height, r:2+Math.random()*3, v:0.3+Math.random()*1.2 }));
+      function draw(){
+        ctx.clearRect(0,0,c.width,c.height);
+        ctx.fillStyle='rgba(255,255,255,0.7)';
+        parts.forEach(p=>{
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+          p.y += p.v; if(p.y > c.height + 10) { p.y = -10; p.x = Math.random()*c.width; }
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    // ---------- Utilities & Settings ----------
+    function openSettings(){
+      openModal(`<div style="padding:12px"><h3>Settings</h3>
+        <p style="color:#666">Use this panel to upload media into <code>media/&lt;festival-id&gt;/</code>. Example: <code>media/diwali/card-1.jpg</code></p>
+        <p style="color:#666">For faster loading, host large videos on an external CDN and update paths in the data object.</p>
+        <div style="text-align:right"><button class="btn" onclick="closeModal()">Close</button></div>
+      </div>`);
+    }
+
+    // download all cards - placeholder (needs server-side or zip library)
+    function downloadCards(){
+      alert('To download all cards at once you can either: (A) provide a zip file in the repo and link it; (B) add a server-side endpoint to create zip. This demo does client-side single-file downloads.');
+    }
+
+    // ---------- Hash routing: open festival if hash present ----------
+    (function handleHashOnLoad(){
+      const hash = location.hash.replace('#','').trim();
+      if(!hash) return;
+      // if hash matches festival id or a media path
+      const festName = Object.keys(FESTIVALS).find(k => FESTIVALS[k].id === hash || hash.toLowerCase() === k.toLowerCase());
+      if(festName) openFestival(festName);
+    })();
+
+    // ---------- Simple keyboard / accessibility ----------
+    document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') closeModal(); });
+
+    // ---------- End of script ----------
+  </script>
+</body>
+</html>
