@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Festival Wishes — Cards & Videos</title>
 <style>
-:root {
+:root{
   --accent:#ff6b35;
   --muted:#6b7280;
   --bg:#fffaf0;
@@ -13,127 +13,99 @@
   --radius:12px;
   --shadow:0 8px 24px rgba(17,17,17,0.08);
 }
-body {
-  margin:0;font-family:Inter,sans-serif;background:var(--bg);color:#111;
-}
-header {
-  display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--accent);color:#fff;
-}
-header h1{margin:0;}
-.container{max-width:1100px;margin:20px auto;padding:0 16px}
-.search-bar{margin:12px 0;display:flex;gap:8px}
-.search-bar input{flex:1;padding:8px 12px;border-radius:10px;border:1px solid rgba(0,0,0,0.1)}
-.festival-grid,.media-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.festival-card,.video-card,.card-item{background:var(--card-bg);border-radius:var(--radius);padding:10px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
-.festival-card img,.card-item img{width:100%;height:140px;object-fit:cover;border-radius:8px}
-.video-card video{width:100%;border-radius:8px}
-.card-actions{display:flex;gap:8px;margin-top:6px}
-.btn{background:var(--accent);color:#fff;padding:8px 12px;border:none;border-radius:10px;cursor:pointer}
-.btn.alt{background:#fff;color:#111;border:1px solid rgba(0,0,0,0.1)}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
-.modal.show{display:flex}
-.modal img, .modal video{max-width:90%;max-height:90%;border-radius:12px}
-@media(max-width:600px){.festival-card img,.card-item img{height:120px;}}
+*{box-sizing:border-box;}
+body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:#111;}
+header{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;background:var(--accent);color:#fff;}
+header h1{margin:0;font-size:20px;}
+.container{max-width:1100px;margin:20px auto;padding:0 16px;}
+.festival-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;}
+.festival-card,.video-card,.card-item{background:var(--card-bg);border-radius:var(--radius);padding:10px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:6px;}
+.festival-card img,.card-item img{width:100%;border-radius:8px;object-fit:cover;}
+.video-card video{width:100%;border-radius:8px;}
+.card-actions{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap;}
+.btn{background:var(--accent);color:#fff;padding:8px 12px;border:none;border-radius:10px;cursor:pointer;font-weight:600;}
+.btn.alt{background:#fff;color:#111;border:1px solid rgba(0,0,0,0.1);}
+@media(max-width:640px){.festival-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
-<header><h1>Festival Wishes</h1></header>
+<header>
+<h1>Festival Wishes</h1>
+</header>
 <main class="container">
-
 <section id="homePage">
-<div class="search-bar">
-<input id="searchInput" placeholder="Search festival..." oninput="renderFestivals()">
-</div>
 <div id="festivals" class="festival-grid"></div>
 </section>
-
 <section id="festivalPage" style="display:none">
 <button onclick="goHome()">← Back</button>
 <h2 id="festivalTitle"></h2>
 <div id="festivalDesc"></div>
+<div style="margin:10px 0"><button class="btn" onclick="downloadAllCards()">Download All Cards</button></div>
 <h3>Videos</h3>
-<div id="videoGrid" class="media-grid"></div>
+<div id="videoGrid" class="festival-grid"></div>
 <h3>Cards</h3>
-<div id="cardGrid" class="media-grid"></div>
+<div id="cardGrid" class="festival-grid"></div>
 </section>
-
-<div id="previewModal" class="modal" onclick="closeModal()"></div>
-
 </main>
-
 <script>
 const SITE_URL='https://festivalwishes.github.io/';
 
-// Add new festivals here (name, id, description)
-const FESTIVALS=[
-  {id:'christmas', name:'Christmas', description:'Celebrate Christmas!'},
-  {id:'diwali', name:'Diwali', description:'Festival of Lights!'},
-  {id:'holi', name:'Holi', description:'Festival of Colours!'}
-];
+const FESTIVALS={
+  'Christmas': {id:'christmas', title:'Christmas', description:'Christmas Celebrations', thumbnail:'media/christmas/card-1.jpg'},
+  // Add new festivals here
+};
 
-// Render all festivals
 function renderFestivals(){
-  const query=document.getElementById('searchInput').value.toLowerCase();
   const festivalsEl=document.getElementById('festivals');
   festivalsEl.innerHTML='';
-  FESTIVALS.forEach(f=>{
-    if(f.name.toLowerCase().includes(query)){
-      const card=document.createElement('div'); card.className='festival-card';
-      const thumb=`media/${f.id}/card-1.jpg`;
-      card.innerHTML=`<img src='${thumb}' alt='${f.name}'>
-        <h3>${f.name}</h3>
-        <p>${f.description}</p>
-        <div class='card-actions'><button class='btn' onclick="openFestival('${f.id}')">Open</button></div>`;
-      festivalsEl.appendChild(card);
-    }
+  Object.keys(FESTIVALS).forEach(name=>{
+    const f=FESTIVALS[name];
+    const card=document.createElement('div');
+    card.className='festival-card';
+    card.innerHTML=`
+      <img src='${f.thumbnail}' alt='${name}' onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+      <h3>${f.title}</h3>
+      <p>${f.description}</p>
+      <button class='btn' onclick="openFestival('${name}')">Open</button>
+    `;
+    festivalsEl.appendChild(card);
   });
 }
 
-// Open festival page
-async function openFestival(festId){
-  const fest=FESTIVALS.find(f=>f.id===festId);
+function fetchMedia(festId){
+  return fetch(SITE_URL+'media/'+festId+'/').then(r=>r.text()).then(html=>{
+    const parser=new DOMParser();
+    const doc=parser.parseFromString(html,'text/html');
+    const files=Array.from(doc.querySelectorAll('a')).map(a=>a.getAttribute('href'));
+    const cards=files.filter(f=>f.startsWith('card-') && f.endsWith('.jpg'));
+    const videos=files.filter(f=>f.startsWith('video-') && f.endsWith('.mp4'));
+    return {cards,videos};
+  }).catch(()=>({cards:[],videos:[]}));
+}
+
+async function openFestival(name){
+  const f=FESTIVALS[name];
   document.getElementById('homePage').style.display='none';
   document.getElementById('festivalPage').style.display='block';
-  document.getElementById('festivalTitle').textContent=fest.name;
-  document.getElementById('festivalDesc').textContent=fest.description;
+  document.getElementById('festivalTitle').textContent=name;
+  document.getElementById('festivalDesc').textContent=f.description;
 
-  const cards=await fetchMedia(fest.id,'card');
-  const videos=await fetchMedia(fest.id,'video');
+  const {cards,videos}=await fetchMedia(f.id);
 
-  // Cards
+  const videoGrid=document.getElementById('videoGrid'); videoGrid.innerHTML='';
+  videos.forEach(src=>{
+    const vcard=document.createElement('div'); vcard.className='video-card';
+    vcard.innerHTML=`<video controls src='media/${f.id}/${src}'></video>
+      <div class='card-actions'><button class='btn' onclick="downloadFile('media/${f.id}/${src}')">Download</button></div>`;
+    videoGrid.appendChild(vcard);
+  });
+
   const cardGrid=document.getElementById('cardGrid'); cardGrid.innerHTML='';
   cards.forEach(src=>{
     const c=document.createElement('div'); c.className='card-item';
-    c.innerHTML=`<img src='media/${fest.id}/${src}' onclick="openModal('media/${fest.id}/${src}')">
-      <div class='card-actions'>
-        <button class='btn' onclick="downloadFile('media/${fest.id}/${src}')">Download</button>
-      </div>`;
+    c.innerHTML=`<img src='media/${f.id}/${src}' alt='Card'><div class='card-actions'><button class='btn' onclick="downloadFile('media/${f.id}/${src}')">Download</button></div>`;
     cardGrid.appendChild(c);
   });
-
-  // Videos
-  const videoGrid=document.getElementById('videoGrid'); videoGrid.innerHTML='';
-  videos.forEach(src=>{
-    const v=document.createElement('div'); v.className='video-card';
-    v.innerHTML=`<video controls onclick="openModal('media/${fest.id}/${src}','video')"><source src='media/${fest.id}/${src}' type="video/mp4"></video>
-      <div class='card-actions'>
-        <button class='btn' onclick="downloadFile('media/${fest.id}/${src}')">Download</button>
-      </div>`;
-    videoGrid.appendChild(v);
-  });
-}
-
-// Fetch media
-async function fetchMedia(festId,type){
-  const folderUrl=`media/${festId}/`;
-  try{
-    const res=await fetch(folderUrl);
-    const text=await res.text();
-    const parser=new DOMParser();
-    const doc=parser.parseFromString(text,'text/html');
-    const files=Array.from(doc.querySelectorAll('a')).map(a=>a.getAttribute('href'));
-    return files.filter(f=>f.startsWith(type+'-'));
-  }catch(e){return [];}
 }
 
 function goHome(){
@@ -145,17 +117,11 @@ function downloadFile(url){
   const a=document.createElement('a'); a.href=url; a.download=url.split('/').pop(); a.click();
 }
 
-// Lightbox modal
-function openModal(src,type='image'){
-  const modal=document.getElementById('previewModal');
-  if(type==='video'){
-    modal.innerHTML=`<video controls autoplay src='${src}'></video>`;
-  }else{
-    modal.innerHTML=`<img src='${src}'>`;
-  }
-  modal.classList.add('show');
+function downloadAllCards(){
+  const cardLinks=document.querySelectorAll('#cardGrid .card-item img');
+  if(cardLinks.length===0){alert('No cards available'); return;}
+  cardLinks.forEach(img=>downloadFile(img.src));
 }
-function closeModal(){document.getElementById('previewModal').classList.remove('show');}
 
 renderFestivals();
 </script>
