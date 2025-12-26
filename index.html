@@ -41,11 +41,6 @@ header .logo-text{
   margin-bottom:4px;
   cursor:pointer;
 }
-header .tagline{
-  font-size:14px;
-  margin-top:2px;
-  color:#fff;
-}
 .search-box{
   display:flex;
   justify-content:center;
@@ -118,62 +113,28 @@ header .tagline{
   color:#111;
   border:1px solid rgba(0,0,0,0.1);
 }
-.new-buttons{
-  display:flex;
-  justify-content:center;
-  gap:16px;
-  margin:16px 0;
-}
-.new-buttons .btn{
-  width:auto;
-  padding:10px 20px;
-  font-size:15px;
-}
-.index-menu{
-  position:fixed;
-  bottom:18px;
-  left:18px;
-  background:var(--accent);
-  color:white;
-  width:46px;
-  height:46px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  border-radius:50%;
-  cursor:pointer;
-  z-index:100;
-  box-shadow:var(--shadow);
-  font-size:22px;
-}
-.index-panel{
-  position:fixed;
-  bottom:72px;
-  left:18px;
-  background:#fff;
-  width:270px;
-  max-height:440px;
-  overflow-y:auto;
-  padding:14px;
-  border-radius:14px;
-  box-shadow:var(--shadow);
-  display:none;
-  z-index:100;
-}
-.sprinkle{
-  position:absolute;
-  width:8px;
-  height:8px;
-  background:rgba(255,215,0,0.8);
-  border-radius:50%;
-  pointer-events:none;
-  animation:fall linear infinite;
-}
-@keyframes fall{0%{transform:translateY(0);}100%{transform:translateY(100vh);}}
 .share-btn{
   background:#00acee;
   margin-top:4px;
   font-size:13px;
+}
+.menu-buttons{
+  display:flex;
+  justify-content:center;
+  gap:12px;
+  margin:14px 0 24px 0;
+  padding:0 10px;
+}
+.menu-buttons button{
+  width:auto;
+  padding:10px 18px;
+  font-size:15px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  border:none;
+  background:white;
+  box-shadow:0 4px 12px rgba(0,0,0,0.1);
 }
 </style>
 </head>
@@ -182,10 +143,13 @@ header .tagline{
 <header>
   <div class="logo-text" onclick="goHome()">✨ Festival Wishes ✨</div>
   <div class="tagline">We Spread Love...... 💕</div>
-  <div class="new-buttons">
-    <button class="btn" onclick="openFamousDays()">📅 Famous Days</button>
-    <button class="btn" onclick="openJayanti()">🙏 Great People Jayanti</button>
+
+  <!-- NEW BUTTONS BELOW NAME -->
+  <div class="menu-buttons">
+    <button onclick="openFamousDays()">📅 Famous Days</button>
+    <button onclick="openJayanti()">🙏 Great People Jayanti</button>
   </div>
+
   <div class="search-box">
     <input type="text" class="search-input" placeholder="Search festival..." id="searchInput">
     <button class="btn-search" onclick="filterFestivals()">Search</button>
@@ -193,8 +157,22 @@ header .tagline{
 </header>
 
 <main class="container">
+  <!-- HOME / FESTIVAL SEASONS -->
   <section id="seasonSection"></section>
 
+  <!-- FAMOUS DAYS GRID LIST -->
+  <section id="famousDaysSection" style="display:none">
+    <button class="btn alt" onclick="goHome()">← Back</button>
+    <div class="festival-grid" id="famousDaysGrid"></div>
+  </section>
+
+  <!-- JAYANTI GRID LIST -->
+  <section id="jayantiSection" style="display:none">
+    <button class="btn alt" onclick="goHome()">← Back</button>
+    <div class="festival-grid" id="jayantiGrid"></div>
+  </section>
+
+  <!-- FESTIVAL/ DAY DETAIL PAGE -->
   <section id="festivalPage" style="display:none">
     <button class="btn alt" onclick="goHome()">← Back to Home</button>
     <h2 id="festivalTitle"></h2>
@@ -205,167 +183,142 @@ header .tagline{
       <button class="btn" style="width:auto;padding:8px 16px;" onclick="showCards()">Show Cards</button>
     </div>
 
-    <h3 id="videoSection">🎬 Videos</h3>
+    <h3>🎬 Videos</h3>
     <div id="videoGrid" class="festival-grid"></div>
 
-    <h3 id="cardSection">🖼 Cards</h3>
+    <h3>🖼 Cards</h3>
     <div id="cardGrid" class="festival-grid"></div>
   </section>
 </main>
 
-<div class="index-menu" onclick="toggleIndex()">☰</div>
-<div class="index-panel" id="indexPanel">
-  <h3>Festival Index</h3>
-  <div id="indexList"></div>
-</div>
-
 <script>
 // ===========================
-// MEDIA LIBRARY (keep all original festivals untouched)
+// MEDIA LIBRARY (Festivals + Famous Days + Jayanti)
 // ===========================
 const MEDIA_LIBRARY = {
-  diwali: {thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
-  holi: {thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
-  christmas: {thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
-  newyear: {thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]}
+  diwali:      { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
+  holi:        { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
+  christmas:   { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
+  newyear:     { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
+  eid:         { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
+  raksha:      { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
+  independence:{ thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.jpg","video10.mp4"] },
+
+  // FAMOUS DAYS PLACEHOLDER
+  maharashtraday:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  mothersday:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  fathersday:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  childrensday:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  constitutionday:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  yogaday:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+
+  // JAYANTI PLACEHOLDER
+  vivekananda:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  bose:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  shivaji:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  ambedkar:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  tagore:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  shastri:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  kalam:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  patel:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  nehru:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  vajpayee:{thumb:"thumb.jpg",cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"],videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]}
 };
 
-// ===========================
-// ORIGINAL FESTIVALS
-// ===========================
-const FESTIVALS={
-  'Diwali':{id:'diwali',description:'Festival of Lights'},
-  'Holi':{id:'holi',description:'Festival of Colours'},
-  'Christmas':{id:'christmas',description:'Merry Christmas'},
-  'New Year':{id:'newyear',description:'Happy New Year'}
+// LISTS
+const FAMOUS_DAYS={
+  'Maharashtra Day':{id:'maharashtraday',description:'1 May'},
+  'Mother’s Day':{id:'mothersday',description:'2nd Sunday of May'},
+  'Father’s Day':{id:'fathersday',description:'3rd Sunday of June'},
+  'Children’s Day':{id:'childrensday',description:'14 November'},
+  'Constitution Day of India':{id:'constitutionday',description:'26 November'},
+  'International Yoga Day':{id:'yogaday',description:'21 June'}
 };
 
-// ===========================
-// SEASONS
-// ===========================
-const SEASONS={
-  '❄ Winter':['Christmas','New Year'],
-  '🌸 Spring':['Holi'],
-  '🍁 Autumn':['Diwali']
+const JAYANTI_LIST={
+  'Swami Vivekananda':{id:'vivekananda',description:'12 Jan'},
+  'Netaji Subhash Chandra Bose':{id:'bose',description:'23 Jan'},
+  'Chhatrapati Shivaji Maharaj':{id:'shivaji',description:'19 Feb'},
+  'Dr. B.R. Ambedkar':{id:'ambedkar',description:'14 Apr'},
+  'Rabindranath Tagore':{id:'tagore',description:'7 May'},
+  'Lal Bahadur Shastri':{id:'shastri',description:'2 Oct'},
+  'Dr. A.P.J. Abdul Kalam':{id:'kalam',description:'15 Oct'},
+  'Sardar Vallabhbhai Patel':{id:'patel',description:'31 Oct'},
+  'Jawaharlal Nehru':{id:'nehru',description:'14 Nov'},
+  'Atal Bihari Vajpayee':{id:'vajpayee',description:'25 Dec'}
 };
 
-// ===========================
-// FAMOUS DAYS AND JAYANTI
-// ===========================
-const FAMOUS_DAYS = [
-  'Republic Day of India','Independence Day of India','Constitution Day of India','Yoga Day',
-  'Maharashtra Day','Mother Day','Father Day','Children Day','Gudipadwa','Krushna Janmashtami',
-  'Mahashivratri','Bail Pola','Nagpanchami','Mahalaxmi/Gauri Pujan','Ganesh Chaturthi','Navratri','Chhatpuja'
-];
-
-const JAYANTI = [
-  'Swami Vivekananda','Netaji Subhash Chandra Bose','Chhatrapati Shivaji Maharaj','Dr. B.R. Ambedkar',
-  'Chhatrapati Sambhaji Maharaj','V.D. Savarkar','Rabindranath Tagore','Chandra Shekhar Azad','Bhagat Singh',
-  'Mahatma Gandhi','Lal Bahadur Shastri','Dr. A.P.J. Abdul Kalam','Sardar Vallabhbhai Patel','Jawaharlal Nehru','Atal Bihari Vajpayee'
-];
-
-// ===========================
-// FUNCTIONS
-// ===========================
-function showVideos(){document.getElementById("videoGrid").style.display="grid"; document.getElementById("cardGrid").style.display="none";}
-function showCards(){document.getElementById("cardGrid").style.display="grid"; document.getElementById("videoGrid").style.display="none";}
-
-function renderHome(){
-  const sec=document.getElementById('seasonSection');
-  sec.style.display='block';
-  document.getElementById('festivalPage').style.display='none';
-  sec.innerHTML='';
-  Object.keys(SEASONS).forEach(season=>{
-    sec.innerHTML+=`<div class='season-title'>${season}</div><div class='festival-grid'>`+
-      SEASONS[season].map(name=>{
-        const f=FESTIVALS[name]; if(!f) return '';
-        const m=MEDIA_LIBRARY[f.id] || {thumb:"thumb.jpg"};
-        return `<div class='festival-card'><img src='media/${f.id}/${m.thumb}'><h3>${name}</h3>
-          <button class='btn' onclick="openFestival('${name}')">Open</button></div>`;
-      }).join('')+`</div>`;
-  });
+function renderFamousDays(){
+  document.getElementByById('famousDaysGrid').innerHTML=
+    Object.keys(FAMOUS_DAYS).map(n=>{
+      const f=FAMOUS_DAYS[n];
+      const m=MEDIA_LIBRARY[f.id];
+      return `<div class='festival-card'><img src='media/famousdays/${f.id}/${m.thumb}'><h3>${n}</h3>
+        <button class='btn' onclick="openDay('${n}', 'famous')">Open</button></div>`;
+    }).join('');
 }
 
-function openFestival(name){
-  const f = FESTIVALS[name];
+function renderJayanti(){
+  document.getElementByById('jayantiGrid').innerHTML=
+    Object.keys(JAYANTI_LIST).map(n=>{
+      const f=JAYANTI_LIST[n];
+      const m=MEDIA_LIBRARY[f.id];
+      return `<div class='festival-card'><img src='media/jayanti/${f.id}/${m.thumb}'><h3>${n}</h3>
+        <button class='btn' onclick="openDay('${n}', 'jayanti')">Open</button></div>`;
+    }).join('');
+}
+
+function openDay(name, type){
+  const f = type==='famous' ? FAMOUS_DAYS[name] : JAYANTI_LIST[name];
   const m = MEDIA_LIBRARY[f.id];
+  document.getElementById(type==='famous'?'famousDaysSection':'jayantiSection').style.display='none';
   document.getElementById('seasonSection').style.display='none';
   document.getElementById('festivalPage').style.display='block';
   document.getElementById('festivalTitle').textContent=name;
-  document.getElementById('festivalDesc').textContent=f.description || '';
+  document.getElementById('festivalDesc').textContent=f.description;
+
   const vg=document.getElementById('videoGrid');
   const cg=document.getElementById('cardGrid');
   vg.innerHTML=''; cg.innerHTML='';
-  if(m){
-    m.videos.forEach(v=>{
-      vg.innerHTML+=`<div class='video-card'><video controls src='media/${f.id}/${v}'></video>
-        <button class='btn' onclick="downloadFile('media/${f.id}/${v}')">Download</button>
-        <button class='btn share-btn' onclick="shareFile('media/${f.id}/${v}')">Share</button>
-      </div>`;
-    });
-    m.cards.forEach(c=>{
-      cg.innerHTML+=`<div class='card-item'><img src='media/${f.id}/${c}'>
-        <button class='btn' onclick="downloadFile('media/${f.id}/${c}')">Download</button>
-        <button class='btn share-btn' onclick="shareFile('media/${f.id}/${c}')">Share</button>
-      </div>`;
-    });
-  }
+
+  m.videos.forEach(v=>{
+    vg.innerHTML+=`<div class='video-card'><video controls src='media/${type==='famous'?'famousdays':'jayanti'}/${f.id}/${v}'></video>
+      <button class='btn' onclick="downloadFile('media/${type==='famous'?'famousdays':'jayanti'}/${f.id}/${v}')">Download</button>
+      <button class='btn share-btn' onclick="shareFile('media/${type==='famous'?'famousdays':'jayanti'}/${f.id}/${v}')">Share</button>
+    </div>`;
+  });
+
+  m.cards.forEach(c=>{
+    cg.innerHTML+=`<div class='card-item'><img src='media/${type==='famous'?'famousdays':'jayanti'}/${f.id}/${c}'>
+      <button class='btn' onclick="downloadFile('media/${type==='famous'?'famousdays':'jayanti'}/${f.id}/${c}')">Download</button>
+      <button class='btn share-btn' onclick="shareFile('media/${type==='famous'?'famousdays':'jayanti'}/${f.id}/${c}')">Share</button>
+    </div>`;
+  });
+
   vg.style.display="none"; cg.style.display="none";
 }
 
 function openFamousDays(){
-  renderSpecialList('📅 Famous Days', FAMOUS_DAYS, 'famousdays');
+  document.getElementById('seasonSection').style.display='none';
+  document.getElementById('jayantiSection').style.display='none';
+  document.getElementById('famousDaysSection').style.display='block';
+  renderFamousDays();
 }
 
 function openJayanti(){
-  renderSpecialList('🙏 Great People Jayanti', JAYANTI, 'jayanti');
-}
-
-function renderSpecialList(title, list, mediaId){
   document.getElementById('seasonSection').style.display='none';
-  document.getElementById('festivalPage').style.display='block';
-  document.getElementById('festivalTitle').textContent=title;
-  document.getElementById('festivalDesc').textContent='';
-  const vg=document.getElementById('videoGrid');
-  const cg=document.getElementById('cardGrid');
-  vg.innerHTML=''; cg.innerHTML='';
-  list.forEach(item=>{
-    cg.innerHTML+=`<div class='card-item'><h3 style="text-align:center">${item}</h3>
-      <button class='btn' onclick="alert('Add 10 cards for ${item}')">Show Cards</button>
-      <button class='btn' onclick="alert('Add 10 videos for ${item}')">Show Videos</button>
-    </div>`;
-  });
-  vg.style.display="none"; cg.style.display="grid";
+  document.getElementById('famousDaysSection').style.display='none';
+  document.getElementById('jayantiSection').style.display='block';
+  renderJayanti();
 }
 
-function filterFestivals(){
-  const q=document.getElementById('searchInput').value.toLowerCase();
-  const res=Object.keys(FESTIVALS).filter(n=>n.toLowerCase().includes(q));
-  const sec=document.getElementById('seasonSection');
-  sec.innerHTML=`<div class='season-title'>🔍 Results</div><div class='festival-grid'>`+
-    res.map(name=>{
-      const f=FESTIVALS[name];
-      const m=MEDIA_LIBRARY[f.id]||{thumb:"thumb.jpg"};
-      return `<div class='festival-card'><img src='media/${f.id}/${m.thumb}'><h3>${name}</h3>
-        <button class='btn' onclick="openFestival('${name}')">Open</button></div>`;
-    }).join('')+`</div>`;
+function goHome(){
+  document.getElementById('famousDaysSection').style.display='none';
+  document.getElementById('jayantiSection').style.display='none';
+  document.getElementById('festivalPage').style.display='none';
+  document.getElementById('seasonSection').style.display='block';
 }
 
-function toggleIndex(){const p=document.getElementById('indexPanel'); p.style.display=p.style.display==='block'?'none':'block';}
-function renderIndex(){document.getElementById('indexList').innerHTML=Object.keys(FESTIVALS).map(n=>`<button class='btn alt' onclick="openFestival('${n}')">${n}</button>`).join('');}
-
-function downloadFile(u){const a=document.createElement('a');a.href=u;a.download=u.split('/').pop();a.click();}
-function shareFile(u){
-  if(navigator.share){
-    navigator.share({title:'Festival Wishes',url:u});
-  } else{
-    alert('Share not supported. Copy link: '+location.origin+'/'+u);
-  }
-}
-function goHome(){ renderHome(); }
-
-renderHome();
-renderIndex();
 </script>
 </body>
 </html>
