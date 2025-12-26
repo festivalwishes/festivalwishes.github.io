@@ -224,7 +224,7 @@ header .tagline{
 // MEDIA LIBRARY - All categories with 10 cards + 10 videos
 // ===========================
 const MEDIA_LIBRARY = {};
-const categories = ['diwali','holi','christmas','newyear','eid','raksha','baisakhi','makar','ramnavmi','hanuman','republic','independence','constitution','yoga','ambedkar','gandhi','shivaji'];
+const categories = ['diwali','holi','christmas','newyear','eid','raksha','baisakhi','makar','ramnavmi','hanuman','republic','independence','constitution','yoga','maharashtra','mother','father','children','vivekananda','bose','shivaji','ambedkar','sambhaji','savarkar','tagore','azad','bhagat','gandhi','shastri','kalam','patel','nehru','vajpayee'];
 categories.forEach(cat=>{
   MEDIA_LIBRARY[cat] = {
     thumb:"thumb.jpg",
@@ -251,9 +251,25 @@ const FESTIVALS={
   'Independence Day':{id:'independence',description:'Independence Day of India'},
   'Constitution Day':{id:'constitution',description:'Constitution Day of India'},
   'Yoga Day':{id:'yoga',description:'International Yoga Day'},
-  'Dr B R Ambedkar Jayanti':{id:'ambedkar',description:'Jai Bhim'},
-  'Gandhi Jayanti':{id:'gandhi',description:'Remembering Bapu'},
-  'Chhatrapati Shivaji Maharaj Jayanti':{id:'shivaji',description:'Jai Bhavani, Jai Shivaji'}
+  'Maharashtra Day':{id:'maharashtra',description:'Maharashtra Day'},
+  'Mother\'s Day':{id:'mother',description:'Mother\'s Day'},
+  'Father\'s Day':{id:'father',description:'Father\'s Day'},
+  'Children\'s Day':{id:'children',description:'Children\'s Day'},
+  'Swami Vivekananda':{id:'vivekananda',description:'Birth: January 12'},
+  'Netaji Subhash Chandra Bose':{id:'bose',description:'Birth: January 23'},
+  'Chhatrapati Shivaji Maharaj':{id:'shivaji',description:'Birth: February 19'},
+  'Dr. B.R. Ambedkar':{id:'ambedkar',description:'Birth: April 14'},
+  'Chhatrapati Sambhaji Maharaj':{id:'sambhaji',description:'Birth: May 14'},
+  'V.D. Savarkar':{id:'savarkar',description:'Birth: May 28'},
+  'Rabindranath Tagore':{id:'tagore',description:'Birth: May 7'},
+  'Chandra Shekhar Azad':{id:'azad',description:'Birth: July 23'},
+  'Bhagat Singh':{id:'bhagat',description:'Birth: September 28'},
+  'Mahatma Gandhi':{id:'gandhi',description:'Birth: October 2'},
+  'Lal Bahadur Shastri':{id:'shastri',description:'Birth: October 2'},
+  'Dr. A.P.J. Abdul Kalam':{id:'kalam',description:'Birth: October 15'},
+  'Sardar Vallabhbhai Patel':{id:'patel',description:'Birth: October 31'},
+  'Jawaharlal Nehru':{id:'nehru',description:'Birth: November 14'},
+  'Atal Bihari Vajpayee':{id:'vajpayee',description:'Birth: December 25'}
 };
 
 // ===========================
@@ -262,22 +278,29 @@ const FESTIVALS={
 const SEASONS={
   '❄ Winter':['Christmas','New Year'],
   '🌸 Spring':['Holi','Baisakhi','Makar Sankranti','Ram Navmi','Hanuman Jayanti'],
-  '☀ Summer':['Raksha Bandhan','Independence Day','Dr B R Ambedkar Jayanti'],
-  '🍁 Autumn':['Diwali','Eid','Gandhi Jayanti','Chhatrapati Shivaji Maharaj Jayanti']
+  '☀ Summer':['Raksha Bandhan','Independence Day','Dr. B.R. Ambedkar'],
+  '🍁 Autumn':['Diwali','Eid','Mahatma Gandhi','Chhatrapati Shivaji Maharaj']
 };
 
 // ===========================
 // FUNCTIONS
 // ===========================
-function showVideos(){document.getElementById("videoGrid").style.display="grid";document.getElementById("cardGrid").style.display="none";}
-function showCards(){document.getElementById("cardGrid").style.display="grid";document.getElementById("videoGrid").style.display="none";}
+function showVideos(){
+  document.getElementById("videoGrid").style.display="grid";
+  document.getElementById("cardGrid").style.display="none";
+}
+function showCards(){
+  document.getElementById("cardGrid").style.display="grid";
+  document.getElementById("videoGrid").style.display="none";
+}
 
 function renderHome(){
   document.getElementById('festivalsSection').style.display='block';
   document.getElementById('famousDaysSection').style.display='none';
   document.getElementById('greatPeopleSection').style.display='none';
   document.getElementById('festivalPage').style.display='none';
-  const sec=document.getElementById('festivalsSection'); sec.innerHTML='';
+  const sec=document.getElementById('festivalsSection');
+  sec.innerHTML='';
   Object.keys(SEASONS).forEach(season=>{
     sec.innerHTML+=`<div class='season-title'>${season}</div><div class='festival-grid'>`+
       SEASONS[season].map(name=>{
@@ -294,8 +317,8 @@ function showFamousDays(){
   document.getElementById('famousDaysSection').style.display='block';
   document.getElementById('greatPeopleSection').style.display='none';
   document.getElementById('festivalPage').style.display='none';
-  const days=['Republic Day','Independence Day','Constitution Day','Yoga Day'];
   const sec=document.getElementById('famousDaysSection');
+  const days=['Republic Day','Independence Day','Constitution Day','Yoga Day','Maharashtra Day','Mother\'s Day','Father\'s Day','Children\'s Day'];
   sec.innerHTML=`<div class='season-title'>🌟 Famous Days</div><div class='festival-grid'>`+
     days.map(name=>{
       const f=FESTIVALS[name]; const m=MEDIA_LIBRARY[f.id]||{thumb:"thumb.jpg"};
@@ -309,8 +332,8 @@ function showGreatPeople(){
   document.getElementById('famousDaysSection').style.display='none';
   document.getElementById('greatPeopleSection').style.display='block';
   document.getElementById('festivalPage').style.display='none';
-  const people=['Dr B R Ambedkar Jayanti','Gandhi Jayanti','Chhatrapati Shivaji Maharaj Jayanti'];
   const sec=document.getElementById('greatPeopleSection');
+  const people=['Swami Vivekananda','Netaji Subhash Chandra Bose','Chhatrapati Shivaji Maharaj','Dr. B.R. Ambedkar','Chhatrapati Sambhaji Maharaj','V.D. Savarkar','Rabindranath Tagore','Chandra Shekhar Azad','Bhagat Singh','Mahatma Gandhi','Lal Bahadur Shastri','Dr. A.P.J. Abdul Kalam','Sardar Vallabhbhai Patel','Jawaharlal Nehru','Atal Bihari Vajpayee'];
   sec.innerHTML=`<div class='season-title'>🧑‍🎓 Great People Jayanti</div><div class='festival-grid'>`+
     people.map(name=>{
       const f=FESTIVALS[name]; const m=MEDIA_LIBRARY[f.id]||{thumb:"thumb.jpg"};
@@ -320,20 +343,30 @@ function showGreatPeople(){
 }
 
 function openFestival(name){
-  const f = FESTIVALS[name]; const m = MEDIA_LIBRARY[f.id];
+  const f = FESTIVALS[name];
+  const m = MEDIA_LIBRARY[f.id];
   document.getElementById('festivalsSection').style.display='none';
   document.getElementById('famousDaysSection').style.display='none';
   document.getElementById('greatPeopleSection').style.display='none';
   document.getElementById('festivalPage').style.display='block';
   document.getElementById('festivalTitle').textContent=name;
   document.getElementById('festivalDesc').textContent=f.description;
-  const vg=document.getElementById('videoGrid'); const cg=document.getElementById('cardGrid'); vg.innerHTML=''; cg.innerHTML='';
-  m.videos.forEach(v=>{vg.innerHTML+=`<div class='video-card'><video controls src='media/${f.id}/${v}'></video>
-    <button class='btn' onclick="downloadFile('media/${f.id}/${v}')">Download</button>
-    <button class='btn share-btn' onclick="shareFile('media/${f.id}/${v}')">Share</button></div>`;});
-  m.cards.forEach(c=>{cg.innerHTML+=`<div class='card-item'><img src='media/${f.id}/${c}'>
-    <button class='btn' onclick="downloadFile('media/${f.id}/${c}')">Download</button>
-    <button class='btn share-btn' onclick="shareFile('media/${f.id}/${c}')">Share</button></div>`;});
+  const vg=document.getElementById('videoGrid');
+  const cg=document.getElementById('cardGrid');
+  vg.innerHTML=''; cg.innerHTML='';
+
+  m.videos.forEach(v=>{
+    vg.innerHTML+=`<div class='video-card'><video controls src='media/${f.id}/${v}'></video>
+      <button class='btn' onclick="downloadFile('media/${f.id}/${v}')">Download</button>
+      <button class='btn share-btn' onclick="shareFile('media/${f.id}/${v}')">Share</button>
+    </div>`;
+  });
+  m.cards.forEach(c=>{
+    cg.innerHTML+=`<div class='card-item'><img src='media/${f.id}/${c}'>
+      <button class='btn' onclick="downloadFile('media/${f.id}/${c}')">Download</button>
+      <button class='btn share-btn' onclick="shareFile('media/${f.id}/${c}')">Share</button>
+    </div>`;
+  });
   vg.style.display="none"; cg.style.display="none";
 }
 
@@ -343,7 +376,8 @@ function filterFestivals(){
   const sec=document.getElementById('festivalsSection');
   sec.innerHTML=`<div class='season-title'>🔍 Results</div><div class='festival-grid'>`+
     res.map(name=>{
-      const f=FESTIVALS[name]; const m=MEDIA_LIBRARY[f.id]||{thumb:"thumb.jpg"};
+      const f=FESTIVALS[name];
+      const m=MEDIA_LIBRARY[f.id]||{thumb:"thumb.jpg"};
       return `<div class='festival-card'><img src='media/${f.id}/${m.thumb}'><h3>${name}</h3>
         <button class='btn' onclick="openFestival('${name}')">Open</button></div>`;
     }).join('')+`</div>`;
@@ -353,7 +387,13 @@ function toggleIndex(){const p=document.getElementById('indexPanel'); p.style.di
 function renderIndex(){document.getElementById('indexList').innerHTML=Object.keys(FESTIVALS).map(n=>`<button class='btn alt' onclick="openFestival('${n}')">${n}</button>`).join('');}
 
 function downloadFile(u){const a=document.createElement('a');a.href=u;a.download=u.split('/').pop();a.click();}
-function shareFile(u){if(navigator.share){navigator.share({title:'Festival Wishes',url:u});} else{alert('Share not supported. Copy link: '+location.origin+'/'+u);}}
+function shareFile(u){
+  if(navigator.share){
+    navigator.share({title:'Festival Wishes',url:u});
+  } else{
+    alert('Share not supported. Copy link: '+location.origin+'/'+u);
+  }
+}
 function goHome(){ renderHome(); }
 
 renderHome();
