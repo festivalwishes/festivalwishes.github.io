@@ -56,18 +56,37 @@ header .logo-text{
   cursor:pointer;
   font-size:14px;
 }
-.season-title{
-  margin-top:32px;
-  font-size:20px;
+.search-box{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  margin-top:10px;
+}
+.search-input{
+  width:65%;
+  max-width:320px;
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid rgba(0,0,0,0.12);
+  font-size:16px;
+}
+.btn-search{
+  width:22%;
+  max-width:110px;
+  background:white;
+  border:none;
+  padding:10px 12px;
+  border-radius:10px;
   font-weight:700;
-  border-left:5px solid var(--accent);
-  padding-left:12px;
+  cursor:pointer;
+  font-size:15px;
 }
 .festival-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:18px;
   margin-top:14px;
+  padding:18px;
 }
 .festival-card, .video-card, .card-item{
   background:var(--card-bg);
@@ -75,14 +94,15 @@ header .logo-text{
   padding:12px;
   box-shadow:var(--shadow);
   transition:0.2s ease-in-out;
+  text-align:center;
 }
-.festival-card img, .card-item img{
+.festival-card img{
   width:100%;
+  height:100px;
   object-fit:cover;
   border-radius:10px;
-  height:100px;
 }
-.video-card video{
+.video-card video, .card-item img{
   width:100%;
   border-radius:10px;
 }
@@ -106,6 +126,11 @@ header .logo-text{
   background:#00acee;
   margin-top:4px;
   font-size:13px;
+  color:white;
+  border:none;
+  padding:6px;
+  border-radius:8px;
+  cursor:pointer;
 }
 .index-menu{
   position:fixed;
@@ -157,20 +182,20 @@ header .logo-text{
   </div>
 </header>
 
-<main class="container">
+<main>
 
+<section id="seasonSection"></section>
 <section id="famousDaysSection" style="display:none"></section>
 <section id="jayantiSection" style="display:none"></section>
-<section id="seasonSection"></section>
 
-<section id="festivalPage" style="display:none">
-  <button class="btn alt" onclick="goHome()">← Back to Home</button>
+<section id="festivalPage" style="display:none;padding:18px;">
+  <button class="btn alt" style="width:auto;" onclick="goHome()">← Back</button>
   <h2 id="festivalTitle"></h2>
   <p id="festivalDesc"></p>
 
   <div style="margin:16px 0;display:flex;gap:10px;justify-content:center;">
-    <button class="btn" style="width:auto;padding:8px 16px;" onclick="showVideos()">Show Videos</button>
-    <button class="btn" style="width:auto;padding:8px 16px;" onclick="showCards()">Show Cards</button>
+    <button class="btn" style="width:auto;padding:8px 16px;" onclick="showVideos()">Videos</button>
+    <button class="btn" style="width:auto;padding:8px 16px;" onclick="showCards()">Cards</button>
   </div>
 
   <h3>🎬 Videos</h3>
@@ -184,133 +209,117 @@ header .logo-text{
 
 <div class="index-menu" onclick="toggleIndex()">☰</div>
 <div class="index-panel" id="indexPanel">
-  <h3>Index</h3>
+  <h3>Festival Index</h3>
   <div id="indexList"></div>
 </div>
 
 <script>
 
-// ================= MEDIA LIBRARY ==================
-const MEDIA_LIBRARY = {
-  "Diwali":      { folder:"diwali", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Holi":        { folder:"holi", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Christmas":   { folder:"christmas", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "New Year":    { folder:"newyear", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Eid":         { folder:"eid", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Raksha Bandhan": { folder:"raksha", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Republic Day": { folder:"republic-day", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Constitution Day": { folder:"constitution-day", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.jpg","video10.mp4"] },
-  "Yoga Day": { folder:"yoga-day", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-
-  "Gudipadwa":{ folder:"gudipadwa", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Krishna Janmashtami":{ folder:"janmashtami", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Mahashivratri":{ folder:"mahashivratri", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Bail Pola":{ folder:"bail-pola", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  "Nagpanchami":{ folder:"nagpanchami", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] }
+const FESTIVALS = {
+  diwali:{folder:"diwali",name:"Diwali",description:"Festival of Lights"},
+  holi:{folder:"holi",name:"Holi",description:"Festival of Colours"},
+  christmas:{folder:"christmas",name:"Christmas",description:"Merry Christmas"},
+  newyear:{folder:"newyear",name:"New Year",description:"Happy New Year"},
+  eid:{folder:"eid",name:"Eid",description:"Eid Mubarak"},
+  ramnavmi:{folder:"ramnavmi",name:"Ram Navmi",description:"Shri Ram Jayanti"},
+  hanuman:{folder:"hanuman",name:"Hanuman Jayanti",description:"Jai Hanuman"},
+  mahashivratri:{folder:"mahashivratri",name:"Mahashivratri",description:"Har Har Mahadev"},
+  gudipadwa:{folder:"gudipadwa",name:"Gudi Padwa",description:"Marathi New Year"},
+  janmashtami:{folder:"janmashtami",name:"Krushna Janmashtami",description:"Shri Krishna Janma"},
+  nagpanchami:{folder:"nagpanchami",name:"Nag Panchami",description:"Naag Devta Puja"},
+  bailpola:{folder:"bailpola",name:"Bail Pola",description:"Bull Festival"},
+  gauripujan:{folder:"gauri-pujan",name:"Mahalaxmi / Gauri Pujan",description:"Gauri Mata"},
+  ganeshchaturthi:{folder:"ganeshchaturthi",name:"Ganesh Chaturthi",description:"Ganpati Bappa"},
+  navratri:{folder:"navratri",name:"Navratri",description:"Mata Utsav"},
+  independence:{folder:"independence",name:"Independence Day",description:"15 August"},
+  republic:{folder:"republic",name:"Republic Day",description:"26 January"},
+  constitution:{folder:"constitution",name:"Constitution Day",description:"26 November"},
+  yogaday:{folder:"yogaday",name:"Yoga Day",description:"21 June"}
 };
 
-// ================= FESTIVALS ==================
-const FESTIVALS={
-  "Diwali":{description:"Festival of Lights"},
-  "Holi":{description:"Festival of Colours"},
-  "Christmas":{description:"Merry Christmas"},
-  "New Year":{description:"Happy New Year"},
-  "Eid":{description:"Eid Mubarak"},
-  "Raksha Bandhan":{description:"Celebrate Siblings"},
-  "Gudipadwa":{description:"Gudi Padwa"},
-  "Krishna Janmashtami":{description:"Shri Krishna Janma"},
-  "Mahashivratri":{description:"Lord Shiva Night"},
-  "Bail Pola":{description:"Bull Festival"},
-  "Nagpanchami":{description:"Snake Worship Day"},
-  "Republic Day":{description:"26 January"},
-  "Constitution Day":{description:"26 November"},
-  "Yoga Day":{description:"21 June"}
+const FAMOUS_DAYS = {
+  maharashtra:{folder:"maharashtra",name:"Maharashtra Day",description:"1 May"},
+  mother:{folder:"mother",name:"Mother Day",description:"Second Sunday of May"},
+  father:{folder:"father",name:"Father Day",description:"Third Sunday of June"},
+  children:{folder:"children",name:"Children Day",description:"14 November"}
 };
 
-// ================= FAMOUS DAYS ==================
-const FAMOUS_DAYS={
-  "Maharashtra Day":{id:"maharashtra-day",description:"1 May"},
-  "Mother Day":{id:"mother-day",description:"Second Sunday of May"},
-  "Father Day":{id:"father-day",description:"Third Sunday of June"},
-  "Children Day":{id:"children-day",description:"14 November"}
+const JAYANTI = {
+  vivekananda:{folder:"vivekananda",name:"Swami Vivekananda",description:"12 January"},
+  netaji:{folder:"netaji",name:"Netaji Subhash Chandra Bose",description:"23 January"},
+  tagore:{folder:"tagore",name:"Rabindranath Tagore",description:"7 May"},
+  savarkar:{folder:"savarkar",name:"Veer Savarkar",description:"28 May"},
+  bhagatsingh:{folder:"bhagatsingh",name:"Bhagat Singh",description:"28 September"},
+  kalam:{folder:"kalam",name:"Dr. A.P.J. Abdul Kalam",description:"15 October"},
+  patel:{folder:"patel",name:"Sardar Vallabhbhai Patel",description:"31 October"},
+  nehru:{folder:"nehru",name:"Jawaharlal Nehru",description:"14 November"},
+  vajpayee:{folder:"vajpayee",name:"Atal Bihari Vajpayee",description:"25 December"}
 };
 
-// ================= JAYANTI LIST ==================
-const JAYANTI={
-  "Swami Vivekananda":{id:"swami-vivekananda",description:"12 January"},
-  "Netaji Subhash Chandra Bose":{id:"netaji-bose",description:"23 January"},
-  "Chandra Shekhar Azad":{id:"azad",description:"23 July"},
-  "Bhagat Singh":{id:"bhagat-singh",description:"28 September"},
-  "Dr A.P.J. Abdul Kalam":{id:"kalam",description:"15 October"},
-  "Sardar Vallabhbhai Patel":{id:"patel",description:"31 October"},
-  "Jawaharlal Nehru":{id:"nehru",description:"14 November"},
-  "Atal Bihari Vajpayee":{id:"vajpayee",description:"25 December"}
-};
+function renderFestivals(){
+  const sec=document.getElementById("seasonSection");
+  sec.style.display="grid";
+  sec.innerHTML=Object.values(FESTIVALS).map(f=>{
+    return `<div class='festival-card'><img src='media/${f.folder}/thumb.jpg'><h3>${f.name}</h3>
+      <button class='btn' onclick="openMedia('${f.name}','${f.folder}','festival')">Open</button></div>`;
+  }).join("");
+}
 
-// =============== SAME FUNCTIONS ===============
 function renderFamousDays(){
   const sec=document.getElementById("famousDaysSection");
-  sec.style.display="block";
+  sec.style.display="grid";
   document.getElementById("seasonSection").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
-  sec.innerHTML="<div class='season-title'>🌟 Famous Days</div><div class='festival-grid'>"+
-    Object.keys(FAMOUS_DAYS).map(n=>{
-      const d=FAMOUS_DAYS[n];
-      return `<div class='festival-card'><img src='media/famous-days/${d.id}/thumb.jpg'><h3>${n}</h3>
-        <button class='btn' onclick="openDay('${n}')">Open</button></div>`;
-    }).join("")+"</div>";
+  document.getElementById("festivalPage").style.display="none";
+
+  sec.innerHTML=Object.values(FAMOUS_DAYS).map(f=>{
+    return `<div class='festival-card'><img src='media/${f.folder}/thumb.jpg'><h3>${f.name}</h3>
+      <button class='btn' onclick="openMedia('${f.name}','${f.folder}','famous')">Open</button></div>`;
+  }).join("");
 }
 
 function renderJayanti(){
   const sec=document.getElementById("jayantiSection");
-  sec.style.display="block";
+  sec.style.display="grid";
   document.getElementById("seasonSection").style.display="none";
   document.getElementById("famousDaysSection").style.display="none";
-  document.getElementById("jayantiSection").style.display="block";
-  sec.innerHTML="<div class='season-title'>🇮🇳 Great People Jayanti</div><div class='festival-grid'>"+
-    Object.keys(JAYANTI).map(n=>{
-      const d=JAYANTI[n];
-      return `<div class='festival-card'><img src='media/jayanti/${d.id}/thumb.jpg'><h3>${n}</h3>
-        <button class='btn' onclick="openPerson('${n}')">Open</button></div>`;
-    }).join("")+"</div>";
+  document.getElementById("festivalPage").style.display="none";
+
+  sec.innerHTML=Object.values(JAYANTI).map(f=>{
+    return `<div class='festival-card'><img src='media/${f.folder}/thumb.jpg'><h3>${f.name}</h3>
+      <button class='btn' onclick="openMedia('${f.name}','${f.folder}','jayanti')">Open</button></div>`;
+  }).join("");
 }
 
-function openDay(name){
-  const d=FAMOUS_DAYS[name];
-  openMediaPage(name,d.id,"famous-days");
-}
-
-function openPerson(name){
-  const d=JAYANTI[name];
-  openMediaPage(name,d.id,"jayanti");
-}
-
-function openMediaPage(title,folder,type){
-  document.getElementById("famousDaysSection").style.display="none";
-  document.getElementById("jayantiSection").style.display="none";
+function openMedia(title,folder,type){
   document.getElementById("festivalPage").style.display="block";
   document.getElementById("festivalTitle").textContent=title;
-  document.getElementById("festivalDesc").textContent="";
   const vg=document.getElementById("videoGrid");
   const cg=document.getElementById("cardGrid");
   vg.innerHTML=""; cg.innerHTML="";
 
   for(let i=1;i<=10;i++){
-    cg.innerHTML+=`<div class='card-item'><img src='media/${type}/${folder}/card${i}.jpg'>
-      <button class='btn' onclick="downloadFile('media/${type}/${folder}/card${i}.jpg')">Download</button>
-      <button class='btn share-btn' onclick="shareFile('media/${type}/${folder}/card${i}.jpg')">Share</button></div>`;
-    vg.innerHTML+=`<div class='video-card'><video controls src='media/${type}/${folder}/video${i}.mp4'></video>
-      <button class='btn' onclick="downloadFile('media/${type}/${folder}/video${i}.mp4')">Download</button>
-      <button class='btn share-btn' onclick="shareFile('media/${type}/${folder}/video${i}.mp4')">Share</button></div>`;
+    cg.innerHTML+=`<div class='card-item'><img src='media/${folder}/card${i}.jpg'>
+      <button class='btn' onclick="downloadFile('media/${folder}/card${i}.jpg')">Download</button>
+      <button class='share-btn' onclick="shareFile('media/${folder}/card${i}.jpg')">Share</button></div>`;
+
+    vg.innerHTML+=`<div class='video-card'><video controls src='media/${folder}/video${i}.mp4'></video>
+      <button class='btn' onclick="downloadFile('media/${folder}/video${i}.mp4')">Download</button>
+      <button class='share-btn' onclick="shareFile('media/${folder}/video${i}.mp4')">Share</button></div>`;
   }
 
   vg.style.display="none"; cg.style.display="none";
 }
 
-function goHome(){location.reload();}
+function showVideos(){document.getElementById("videoGrid").style.display="grid";document.getElementById("cardGrid").style.display="none";}
+function showCards(){document.getElementById("cardGrid").style.display="grid";document.getElementById("videoGrid").style.display="none";}
 function toggleIndex(){const p=document.getElementById("indexPanel");p.style.display=p.style.display==="block"?"none":"block";}
 function downloadFile(u){const a=document.createElement("a");a.href=u;a.download=u.split("/").pop();a.click();}
 function shareFile(u){navigator.share?navigator.share({url:u}):alert("Copy link: "+u);}
+function goHome(){document.getElementById("festivalPage").style.display="none";document.getElementById("famousDaysSection").style.display="none";document.getElementById("jayantiSection").style.display="none";document.getElementById("seasonSection").style.display="grid";renderFestivals();}
+
+renderFestivals();
+document.getElementById("indexList").innerHTML=Object.values(FESTIVALS).map(f=>`<button class='btn alt' onclick="openMedia('${f.name}','${f.folder}','festival')">${f.name}</button>`).join("");
 
 </script>
 
