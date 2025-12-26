@@ -118,6 +118,17 @@ header .tagline{
   color:#111;
   border:1px solid rgba(0,0,0,0.1);
 }
+.new-buttons{
+  display:flex;
+  justify-content:center;
+  gap:16px;
+  margin:16px 0;
+}
+.new-buttons .btn{
+  width:auto;
+  padding:10px 20px;
+  font-size:15px;
+}
 .index-menu{
   position:fixed;
   bottom:18px;
@@ -149,17 +160,6 @@ header .tagline{
   display:none;
   z-index:100;
 }
-.new-buttons{
-  display:flex;
-  justify-content:center;
-  gap:16px;
-  margin:24px 0;
-}
-.new-buttons .btn{
-  width:auto;
-  padding:10px 20px;
-  font-size:15px;
-}
 .sprinkle{
   position:absolute;
   width:8px;
@@ -182,6 +182,10 @@ header .tagline{
 <header>
   <div class="logo-text" onclick="goHome()">✨ Festival Wishes ✨</div>
   <div class="tagline">We Spread Love...... 💕</div>
+  <div class="new-buttons">
+    <button class="btn" onclick="openFamousDays()">📅 Famous Days</button>
+    <button class="btn" onclick="openJayanti()">🙏 Great People Jayanti</button>
+  </div>
   <div class="search-box">
     <input type="text" class="search-input" placeholder="Search festival..." id="searchInput">
     <button class="btn-search" onclick="filterFestivals()">Search</button>
@@ -191,13 +195,6 @@ header .tagline{
 <main class="container">
   <section id="seasonSection"></section>
 
-  <!-- NEW BUTTONS BELOW FESTIVAL GRID -->
-  <div class="new-buttons" id="specialButtons" style="display:none;">
-    <button class="btn" onclick="openFamousDays()">📅 Famous Days</button>
-    <button class="btn" onclick="openJayanti()">🙏 Great People Jayanti</button>
-  </div>
-
-  <!-- FESTIVAL PAGE -->
   <section id="festivalPage" style="display:none">
     <button class="btn alt" onclick="goHome()">← Back to Home</button>
     <h2 id="festivalTitle"></h2>
@@ -224,20 +221,17 @@ header .tagline{
 
 <script>
 // ===========================
-// MEDIA LIBRARY (Original + placeholders for new days/jayanti)
+// MEDIA LIBRARY (keep all original festivals untouched)
 // ===========================
 const MEDIA_LIBRARY = {
-  diwali:      { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  holi:        { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  christmas:   { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  newyear:     { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  // Add media for Famous Days & Jayanti placeholders
-  famousdays:  { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] },
-  jayanti:     { thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"] }
+  diwali: {thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  holi: {thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  christmas: {thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]},
+  newyear: {thumb:"thumb.jpg", cards:["card1.jpg","card2.jpg","card3.jpg","card4.jpg","card5.jpg","card6.jpg","card7.jpg","card8.jpg","card9.jpg","card10.jpg"], videos:["video1.mp4","video2.mp4","video3.mp4","video4.mp4","video5.mp4","video6.mp4","video7.mp4","video8.mp4","video9.mp4","video10.mp4"]}
 };
 
 // ===========================
-// FESTIVALS
+// ORIGINAL FESTIVALS
 // ===========================
 const FESTIVALS={
   'Diwali':{id:'diwali',description:'Festival of Lights'},
@@ -256,11 +250,12 @@ const SEASONS={
 };
 
 // ===========================
-// NEW LISTS
+// FAMOUS DAYS AND JAYANTI
 // ===========================
 const FAMOUS_DAYS = [
   'Republic Day of India','Independence Day of India','Constitution Day of India','Yoga Day',
-  'Maharashtra Day','Mother Day','Father Day','Children Day','Gudipadwa','Krushna Janmashtami','Mahashivratri','Bail Pola','Nagpanchami','Mahalaxmi/Gauri Pujan','Ganesh Chaturthi','Navratri','Chhatpuja'
+  'Maharashtra Day','Mother Day','Father Day','Children Day','Gudipadwa','Krushna Janmashtami',
+  'Mahashivratri','Bail Pola','Nagpanchami','Mahalaxmi/Gauri Pujan','Ganesh Chaturthi','Navratri','Chhatpuja'
 ];
 
 const JAYANTI = [
@@ -279,8 +274,6 @@ function renderHome(){
   const sec=document.getElementById('seasonSection');
   sec.style.display='block';
   document.getElementById('festivalPage').style.display='none';
-  const special=document.getElementById('specialButtons');
-  special.style.display='flex'; // show new buttons
   sec.innerHTML='';
   Object.keys(SEASONS).forEach(season=>{
     sec.innerHTML+=`<div class='season-title'>${season}</div><div class='festival-grid'>`+
@@ -321,34 +314,25 @@ function openFestival(name){
 }
 
 function openFamousDays(){
-  document.getElementById('seasonSection').style.display='none';
-  document.getElementById('festivalPage').style.display='block';
-  document.getElementById('festivalTitle').textContent='📅 Famous Days';
-  document.getElementById('festivalDesc').textContent='';
-  const vg=document.getElementById('videoGrid');
-  const cg=document.getElementById('cardGrid');
-  vg.innerHTML=''; cg.innerHTML='';
-  FAMOUS_DAYS.forEach(d=>{
-    cg.innerHTML+=`<div class='card-item'><h3 style="text-align:center">${d}</h3>
-      <button class='btn' onclick="alert('Add 10 cards for ${d}')">View Cards</button>
-      <button class='btn' onclick="alert('Add 10 videos for ${d}')">View Videos</button>
-    </div>`;
-  });
-  vg.style.display="none"; cg.style.display="grid";
+  renderSpecialList('📅 Famous Days', FAMOUS_DAYS, 'famousdays');
 }
 
 function openJayanti(){
+  renderSpecialList('🙏 Great People Jayanti', JAYANTI, 'jayanti');
+}
+
+function renderSpecialList(title, list, mediaId){
   document.getElementById('seasonSection').style.display='none';
   document.getElementById('festivalPage').style.display='block';
-  document.getElementById('festivalTitle').textContent='🙏 Great People Jayanti';
+  document.getElementById('festivalTitle').textContent=title;
   document.getElementById('festivalDesc').textContent='';
   const vg=document.getElementById('videoGrid');
   const cg=document.getElementById('cardGrid');
   vg.innerHTML=''; cg.innerHTML='';
-  JAYANTI.forEach(j=>{
-    cg.innerHTML+=`<div class='card-item'><h3 style="text-align:center">${j}</h3>
-      <button class='btn' onclick="alert('Add 10 cards for ${j}')">View Cards</button>
-      <button class='btn' onclick="alert('Add 10 videos for ${j}')">View Videos</button>
+  list.forEach(item=>{
+    cg.innerHTML+=`<div class='card-item'><h3 style="text-align:center">${item}</h3>
+      <button class='btn' onclick="alert('Add 10 cards for ${item}')">Show Cards</button>
+      <button class='btn' onclick="alert('Add 10 videos for ${item}')">Show Videos</button>
     </div>`;
   });
   vg.style.display="none"; cg.style.display="grid";
