@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>✨ Festival Wishes ✨</title>
 
+<!-- Google Analytics Tracking -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TB3Q8YZKLJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-TB3Q8YZKLJ');
+</script>
+
 <style>
 :root{
   --accent:#ff6b35;
@@ -171,9 +180,9 @@ header .logo-text{
   display:none;
   z-index:100;
 }
-</style> 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1002530033340276"
-     crossorigin="anonymous"></script>
+</style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1002530033340276"
+crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -270,7 +279,7 @@ const JAYANTI_LIST = {
   "Netaji Subhash Chandra Bose":{folder:"subhashbose",date:"January 23"},
   "Chhatrapati Shivaji Maharaj":{folder:"shivaji",date:"February 19"},
   "Dr. B.R. Ambedkar":{folder:"ambedkar",date:"April 14"},
-  "Chhatrapati Sambhaji Maharaj":{folder:"sambhaji",date:"May 14"},
+  "Chhatrapati Sambhaji महाराज":{folder:"sambhaji",date:"May 14"},
   "Veer Savarkar":{folder:"savarkar",date:"May 28"},
   "Rabindranath Tagore":{folder:"tagore",date:"May 7"},
   "Bhagat Singh":{folder:"bhagatsingh",date:"September 28"},
@@ -333,23 +342,6 @@ function showVideos(folder){
   }
 }
 
-function showFamousDays(){
-  document.getElementById("festivalGrid").style.display="none";
-  document.getElementById("jayantiSection").style.display="none";
-  const sec=document.getElementById("famousDaySection");
-  sec.style.display="block";
-  const grid=document.getElementById("famousDayGrid");
-  grid.innerHTML="";
-  FAMOUS_DAYS.forEach(name=>{
-    const f=FESTIVALS[name];
-    grid.innerHTML+=`<div class="festival-card">
-      <img src="media/${f.id}/thumb.jpg">
-      <h3>${name}</h3>
-      <button class="btn" onclick="openFestival('${f.id}','${name}','${f.description}')">Open</button>
-    </div>`;
-  });
-}
-
 function showJayanti(){
   document.getElementById("festivalGrid").style.display="none";
   document.getElementById("famousDaySection").style.display="none";
@@ -406,6 +398,7 @@ function backHome(){
   document.getElementById("festivalDetail").style.display="none";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
+  document.getElementById("festivalGrid").style.display="grid";
   document.getElementById("festivalGrid").style.display="grid";
 }
 
