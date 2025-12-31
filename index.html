@@ -5,15 +5,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>✨ Festival Wishes ✨</title>
 
-<!-- Google Analytics Tracking -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TB3Q8YZKLJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-TB3Q8YZKLJ');
-</script>
-
 <style>
 :root{
   --accent:#ff6b35;
@@ -180,9 +171,12 @@ header .logo-text{
   display:none;
   z-index:100;
 }
-</style>
+</style> 
+
+<!-- Google Ads Script (unchanged) -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1002530033340276"
-crossorigin="anonymous"></script>
+     crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -203,10 +197,21 @@ crossorigin="anonymous"></script>
 
 <main style="padding:18px;">
 
-  <section id="seasonSection"></section>
-
   <section id="festivalGridSection">
+    <h2>🎉 Festivals</h2>
     <div id="festivalGrid" class="festival-grid"></div>
+  </section>
+
+  <section id="famousDaySection" style="display:none;">
+    <button onclick="backHome()" class="btn">⬅ Back</button>
+    <h2>📅 Famous Days</h2>
+    <div id="famousDayGrid" class="festival-grid"></div>
+  </section>
+
+  <section id="jayantiSection" style="display:none;">
+    <button onclick="backHome()" class="btn">⬅ Back</button>
+    <h2>🌟 Jayanti List</h2>
+    <div id="jayantiGrid" class="festival-grid"></div>
   </section>
 
   <section id="festivalDetail" style="display:none;">
@@ -222,16 +227,6 @@ crossorigin="anonymous"></script>
     <div id="galleryContainer" class="gallery"></div>
   </section>
 
-  <section id="famousDaySection" style="display:none;">
-    <h2>📅 Famous Days</h2>
-    <div id="famousDayGrid" class="festival-grid"></div>
-  </section>
-
-  <section id="jayantiSection" style="display:none;">
-    <h2>🌟 Jayanti List</h2>
-    <div id="jayantiGrid" class="festival-grid"></div>
-  </section>
-
 </main>
 
 <div class="index-menu" onclick="toggleIndex()">☰</div>
@@ -243,23 +238,13 @@ crossorigin="anonymous"></script>
 <script>
 let currentFolder = "";
 
-const MEDIA_LIBRARY = {}; // Keep all your original folders intact
-
+// FESTIVAL LIST
 const FESTIVALS = {
   "Diwali":{id:"diwali",description:"Festival of Lights"},
   "Holi":{id:"holi",description:"Festival of Colours"},
   "Christmas":{id:"christmas",description:"Merry Christmas"},
   "New Year":{id:"newyear",description:"Happy New Year"},
   "Raksha Bandhan":{id:"raksha",description:"Celebrate Siblings"},
-  "Independence Day of India":{id:"independence",description:"Proud to be Indian"},
-  "Republic Day of India":{id:"republicday",description:"Jai Hind"},
-  "Constitution Day of India":{id:"constitutionday",description:"We the People"},
-  "International Yoga Day":{id:"yogaday",description:"Stay Healthy"},
-  "Maharashtra Day":{id:"maharashtraday",description:"Jai Maharashtra"},
-  "Mother's Day":{id:"motherday",description:"Love You Mom"},
-  "Father's Day":{id:"fatherday",description:"Love You Dad"},
-  "Children's Day":{id:"childrenday",description:"Celebrating Kids"},
-  "Hanuman Jayanti":{id:"hanuman",description:"Jai Hanuman"},
   "Ram Navmi":{id:"ramnavmi",description:"Shri Ram Jayanti"},
   "Gudipadwa":{id:"gudipadwa",description:"Happy Gudipadwa"},
   "Krishna Janmashtami":{id:"krushnajanmashtami",description:"Jai Shri Krishna"},
@@ -272,26 +257,34 @@ const FESTIVALS = {
   "Chhatpuja":{id:"chhatpuja",description:"Chhat Mata"}
 };
 
-const FAMOUS_DAYS = ["Maharashtra Day","Mother's Day","Father's Day","Children's Day","International Yoga Day","Republic Day of India","Constitution Day of India","Independence Day of India"];
+// FAMOUS DAYS LIST
+const FAMOUS_DAYS = {
+  "Maharashtra Day":{id:"maharashtraday",description:"Jai Maharashtra"},
+  "Mother's Day":{id:"motherday",description:"Love You Mom"},
+  "Father's Day":{id:"fatherday",description:"Love You Dad"},
+  "Children's Day":{id:"childrenday",description:"Celebrating Kids"},
+  "International Yoga Day":{id:"yogaday",description:"Stay Healthy"},
+  "Republic Day of India":{id:"republicday",description:"Jai Hind"},
+  "Constitution Day of India":{id:"constitutionday",description:"We the People"},
+  "Independence Day of India":{id:"independence",description:"Proud to be Indian"}
+};
 
+// JAYANTI LIST
 const JAYANTI_LIST = {
   "Swami Vivekananda":{folder:"vivekananda",date:"January 12"},
   "Netaji Subhash Chandra Bose":{folder:"subhashbose",date:"January 23"},
   "Chhatrapati Shivaji Maharaj":{folder:"shivaji",date:"February 19"},
   "Dr. B.R. Ambedkar":{folder:"ambedkar",date:"April 14"},
-  "Chhatrapati Sambhaji महाराज":{folder:"sambhaji",date:"May 14"},
-  "Veer Savarkar":{folder:"savarkar",date:"May 28"},
-  "Rabindranath Tagore":{folder:"tagore",date:"May 7"},
-  "Bhagat Singh":{folder:"bhagatsingh",date:"September 28"},
-  "Mahatma Gandhi":{folder:"gandhi",date:"October 2"},
-  "Lal Bahadur Shastri":{folder:"shastri",date:"October 2"},
   "Dr. A.P.J. Abdul Kalam":{folder:"kalam",date:"October 15"},
-  "Sardar Vallabhbhai Patel":{folder:"patel",date:"October 31"},
-  "Jawaharlal Nehru":{folder:"nehru",date:"November 14"},
   "Atal Bihari Vajpayee":{folder:"vajpayee",date:"December 25"}
 };
 
 function renderHome(){
+  document.getElementById("festivalDetail").style.display="none";
+  document.getElementById("famousDaySection").style.display="none";
+  document.getElementById("jayantiSection").style.display="none";
+  document.getElementById("festivalGridSection").style.display="block";
+
   const grid=document.getElementById("festivalGrid");
   grid.innerHTML="";
   Object.keys(FESTIVALS).forEach(name=>{
@@ -305,12 +298,53 @@ function renderHome(){
   renderIndex();
 }
 
+function showFamousDays(){
+  document.getElementById("festivalGridSection").style.display="none";
+  document.getElementById("jayantiSection").style.display="none";
+  document.getElementById("festivalDetail").style.display="none";
+
+  const sec=document.getElementById("famousDaySection");
+  sec.style.display="block";
+
+  const grid=document.getElementById("famousDayGrid");
+  grid.innerHTML="";
+  Object.keys(FAMOUS_DAYS).forEach(name=>{
+    const f=FAMOUS_DAYS[name];
+    grid.innerHTML+=`<div class="festival-card">
+      <img src="media/${f.id}/thumb.jpg">
+      <h3>${name}</h3>
+      <button class="btn" onclick="openFestival('${f.id}','${name}','${f.description}')">Open</button>
+    </div>`;
+  });
+}
+
+function showJayanti(){
+  document.getElementById("festivalGridSection").style.display="none";
+  document.getElementById("famousDaySection").style.display="none";
+  document.getElementById("festivalDetail").style.display="none";
+
+  const sec=document.getElementById("jayantiSection");
+  sec.style.display="block";
+
+  const grid=document.getElementById("jayantiGrid");
+  grid.innerHTML="";
+  Object.keys(JAYANTI_LIST).forEach(person=>{
+    const j=JAYANTI_LIST[person];
+    grid.innerHTML+=`<div class="festival-card">
+      <img src="media/${j.folder}/thumb.jpg">
+      <h3>${person}</h3>
+      <p>${j.date}</p>
+      <button class="btn" onclick="openFestival('${j.folder}','${person} Jayanti','Birthday: ${j.date}')">Open</button>
+    </div>`;
+  });
+}
+
 function openFestival(folder,title,desc){
   currentFolder = folder;
-  document.getElementById("festivalGrid").style.display="none";
+  document.getElementById("festivalDetail").style.display="block";
+  document.getElementById("festivalGridSection").style.display="none";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
-  document.getElementById("festivalDetail").style.display="block";
 
   document.getElementById("festivalTitle").innerText=title;
   document.getElementById("festivalDesc").innerText=desc;
@@ -340,24 +374,6 @@ function showVideos(folder){
       <button onclick="shareMedia('media/${folder}/video${i}.mp4')" class="btn alt">Share</button>
     </div>`;
   }
-}
-
-function showJayanti(){
-  document.getElementById("festivalGrid").style.display="none";
-  document.getElementById("famousDaySection").style.display="none";
-  const sec=document.getElementById("jayantiSection");
-  sec.style.display="block";
-  const grid=document.getElementById("jayantiGrid");
-  grid.innerHTML="";
-  Object.keys(JAYANTI_LIST).forEach(person=>{
-    const j=JAYANTI_LIST[person];
-    grid.innerHTML+=`<div class="festival-card">
-      <img src="media/${j.folder}/thumb.jpg">
-      <h3>${person}</h3>
-      <p>${j.date}</p>
-      <button class="btn" onclick="openFestival('${j.folder}','${person} Jayanti','Birthday: ${j.date}')">Open</button>
-    </div>`;
-  });
 }
 
 function filterFestivals(){
@@ -395,15 +411,12 @@ function renderIndex(){
 }
 
 function backHome(){
-  document.getElementById("festivalDetail").style.display="none";
-  document.getElementById("famousDaySection").style.display="none";
-  document.getElementById("jayantiSection").style.display="none";
-  document.getElementById("festivalGrid").style.display="grid";
-  document.getElementById("festivalGrid").style.display="grid";
+  renderHome();
 }
 
 renderHome();
 </script>
 
 </body>
-</html>
+  </html>
+  
