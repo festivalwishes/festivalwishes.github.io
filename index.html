@@ -5,10 +5,15 @@
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>✨ Festival Wishes ✨</title>    
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>✨ Festival Wishes ✨</title>
+
+<!-- SEO + Open Graph (Added without deleting anything) -->
+<meta name="description" content="Download and share festival wishes greeting cards and videos for 2026. No human faces used in greeting cards.">
+<meta property="og:title" content="✨ Festival Wishes 2026 ✨">
+<meta property="og:description" content="Download and share festival wishes greeting cards and videos for 2026. No human faces used in greeting cards.">
+<meta property="og:image" content="media/newyear/thumb.jpg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="">
 
 <style>
 :root{
@@ -71,8 +76,8 @@ header .logo-text{
   padding:8px 14px;
   border-radius:10px;
   font-weight:600;
-  cursor:pointer;
   margin-top:8px;
+  cursor:pointer;
 }
 .btn.alt{
   background:#fff;
@@ -176,7 +181,7 @@ header .logo-text{
   display:none;
   z-index:100;
 }
-</style> 
+</style>
 
 <!-- Google Ads -->
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1002530033340276"
@@ -340,6 +345,18 @@ function renderHome(){
 // Open Festival / Card / Video
 function openFestival(folder,title,desc){
   currentFolder = folder;
+
+  // SEO + OG dynamic update (Added only, original untouched)
+  document.querySelector('meta[property="og:title"]').setAttribute("content", title);
+  document.querySelector('meta[property="og:description"]').setAttribute("content", desc);
+  document.querySelector('meta[property="og:image"]').setAttribute("content", `media/${folder}/thumb.jpg`);
+  document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
+
+  const metaDesc = document.querySelector('meta[name="description"]');
+  if (metaDesc) {
+    metaDesc.setAttribute("content", `Download free ${title} greeting cards and videos for 2026.`);
+  }
+
   document.getElementById("festivalGrid").style.display="none";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
@@ -490,4 +507,5 @@ renderHome();
 </script>
 
 </body>
-</html>
+  </html>
+  
