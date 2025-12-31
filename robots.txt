@@ -1,4 +1,3 @@
+Sitemap: https://festivalwishes.github.io/sitemap.xml
 User-agent: *
-Allow: /
-
-Sitemap: https://festivalwishes.github.io/Festival-wishes-/sitemap.xml
+Disallow:
