@@ -13,7 +13,7 @@
 <meta property="og:description" content="Download and share festival wishes greeting cards and videos for 2026. No human faces used in greeting cards.">
 <meta property="og:image" content="media/newyear/thumb.jpg">
 <meta property="og:type" content="website">
-<meta property="og:url" content="">
+<meta property="og:url" content="https://festivalwishes.github.io/">
 
 <style>
 :root{
@@ -424,6 +424,14 @@ function showJayanti(){
 
   const grid=document.getElementById("jayantiGrid");
   grid.innerHTML="";
+  Object.keys(FESTIVALS).forEach(person=>{
+    const j=FESTIVALS[person];
+    grid.innerHTML+=`<div class="festival-card">
+      <img src="media/${j.id}/thumb.jpg">
+      <h3>${person}</h3>
+      <button class="btn" onclick="openFestival('${j.id}','${person}','${j.description}')">Open</button>
+    </div>`;
+  });
   Object.keys(JAYANTI_LIST).forEach(person=>{
     const j=JAYANTI_LIST[person];
     grid.innerHTML+=`<div class="festival-card">
@@ -467,6 +475,16 @@ function filterItems(){
   } else if(currentView==="jayanti"){
     const grid=document.getElementById("jayantiGrid");
     grid.innerHTML="";
+    Object.keys(FESTIVALS).forEach(person=>{
+      const j=FESTIVALS[person];
+      if(person.toLowerCase().includes(q)){
+        grid.innerHTML+=`<div class="festival-card">
+          <img src="media/${j.id}/thumb.jpg">
+          <h3>${person}</h3>
+          <button class="btn" onclick="openFestival('${j.id}','${person}','${j.description}')">Open</button>
+        </div>`;
+      }
+    });
     Object.keys(JAYANTI_LIST).forEach(person=>{
       const j=JAYANTI_LIST[person];
       if(person.toLowerCase().includes(q)){
@@ -507,5 +525,4 @@ renderHome();
 </script>
 
 </body>
-  </html>
-  
+</html>
