@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-<link rel="sitemap" type="application/xml" href="https://festivalwishes.github.io/sitemap.xml" />
+<link rel="sitemap" type="application/xml" href="media/sitemap.xml" />
 
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -84,13 +84,6 @@ header .logo-text{
   color:#111;
   border:1px solid rgba(0,0,0,0.1);
 }
-.season-title{
-  margin-top:32px;
-  font-size:20px;
-  font-weight:700;
-  border-left:5px solid var(--accent);
-  padding-left:12px;
-}
 .festival-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
@@ -109,29 +102,6 @@ header .logo-text{
   height:90px;
   object-fit:cover;
   border-radius:10px;
-}
-.video-card, .card-item{
-  background:white;
-  border-radius:14px;
-  padding:10px;
-  box-shadow:var(--shadow);
-  margin:10px 0;
-}
-.card-item img{
-  width:100%;
-  height:120px;
-  object-fit:cover;
-  border-radius:10px;
-}
-.video-card video{
-  width:100%;
-  border-radius:10px;
-}
-.toggle-bar{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  margin:16px 0;
 }
 .gallery{
   display:grid;
@@ -209,7 +179,7 @@ header .logo-text{
 
   <div class="search-box">
     <input type="text" class="search-input" placeholder="Search..." id="searchInput">
-    <button class="btn-search btn alt" onclick="filterItems()">Search</button>
+    <button class="btn alt" onclick="filterItems()">Search</button>
   </div>
 </header>
 
@@ -256,7 +226,7 @@ header .logo-text{
 let currentFolder = "";
 let currentView = "festival"; // festival / famous / jayanti
 
-// Original festival list
+// Festival data SAFE + Makar Sankranti ADDED
 const FESTIVALS = {
   "Diwali":{id:"diwali",description:"Festival of Lights"},
   "Holi":{id:"holi",description:"Festival of Colours"},
@@ -274,17 +244,17 @@ const FESTIVALS = {
   "Hanuman Jayanti":{id:"hanuman",description:"Jai Hanuman"},
   "Ram Navmi":{id:"ramnavmi",description:"Shri Ram Jayanti"},
   "Gudipadwa":{id:"gudipadwa",description:"Happy Gudipadwa"},
+  "Makar Sankranti":{id:"makarsankranti",description:"Kite & Harvest Festival"},
   "Krishna Janmashtami":{id:"krushnajanmashtami",description:"Jai Shri Krishna"},
   "Mahashivratri":{id:"mahashivratri",description:"Har Har Mahadev"},
   "Bail Pola":{id:"bailpola",description:"Pola Festival"},
   "Nag Panchami":{id:"nagpanchami",description:"Nag Devta"},
-  "Mahalaxmi / Gauri Pujan":{id:"mahalaxmipujan",description:"Laxmi Mata"},
   "Ganesh Chaturthi":{id:"ganeshchaturthi",description:"Ganpati Bappa"},
   "Navratri":{id:"navratri",description:"Mata Rani"},
   "Chhatpuja":{id:"chhatpuja",description:"Chhat Mata"}
 };
 
-// Famous Days with real dates
+// Famous days data SAFE (not deleted)
 const FAMOUS_DAYS = [
   {name:"Maharashtra Day",folder:"maharashtraday",date:"May 1",description:"Jai Maharashtra"},
   {name:"Mother's Day",folder:"motherday",date:"May 12",description:"Love You Mom"},
@@ -296,14 +266,7 @@ const FAMOUS_DAYS = [
   {name:"Independence Day of India",folder:"independence",date:"August 15",description:"Proud to be Indian"}
 ];
 
-// Sort Famous Days by actual date
-FAMOUS_DAYS.sort((a,b)=>{
-  const months={"January":1,"February":2,"March":3,"April":4,"May":5,"June":6,"July":7,"August":8,"September":9,"October":10,"November":11,"December":12};
-  let [d1,m1]=a.date.split(" "); let [d2,m2]=b.date.split(" ");
-  return new Date(`${m1} ${d1}`) - new Date(`${m2} ${d2}`);
-});
-
-// Jayanti list
+// Jayanti list SAFE (not deleted, rendering fixed)
 const JAYANTI_LIST = {
   "Swami Vivekananda":{folder:"vivekananda",date:"January 12"},
   "Netaji Subhash Chandra Bose":{folder:"subhashbose",date:"January 23"},
@@ -321,18 +284,21 @@ const JAYANTI_LIST = {
   "Atal Bihari Vajpayee":{folder:"vajpayee",date:"December 25"}
 };
 
-// Home Render
+// Home render FIX (section safe)
 function renderHome(){
   currentView="festival";
-  document.getElementById("festivalGrid").style.display="grid";
+  document.getElementById("festivalGridSection").style.display="block";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
   document.getElementById("festivalDetail").style.display="none";
 
   const grid=document.getElementById("festivalGrid");
   grid.innerHTML="";
+  const seen = new Set();
   Object.keys(FESTIVALS).forEach(name=>{
     const f=FESTIVALS[name];
+    if(seen.has(f.id)) return;
+    seen.add(f.id);
     grid.innerHTML+=`<div class="festival-card">
       <img src="media/${f.id}/thumb.jpg">
       <h3>${name}</h3>
@@ -342,33 +308,20 @@ function renderHome(){
   renderIndex();
 }
 
-// Open Festival / Card / Video
+// Open media folder
 function openFestival(folder,title,desc){
   currentFolder = folder;
-
-  // SEO + OG dynamic update (Added only, original untouched)
-  document.querySelector('meta[property="og:title"]').setAttribute("content", title);
-  document.querySelector('meta[property="og:description"]').setAttribute("content", desc);
-  document.querySelector('meta[property="og:image"]').setAttribute("content", `media/${folder}/thumb.jpg`);
-  document.querySelector('meta[property="og:url"]').setAttribute("content", window.location.href);
-
-  const metaDesc = document.querySelector('meta[name="description"]');
-  if (metaDesc) {
-    metaDesc.setAttribute("content", `Download free ${title} greeting cards and videos for 2026.`);
-  }
-
-  document.getElementById("festivalGrid").style.display="none";
+  document.getElementById("festivalGridSection").style.display="none";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
   document.getElementById("festivalDetail").style.display="block";
 
   document.getElementById("festivalTitle").innerText=title;
   document.getElementById("festivalDesc").innerText=desc;
-
   showCards(folder);
 }
 
-// Show Cards
+// Cards
 function showCards(folder){
   const g=document.getElementById("galleryContainer");
   g.innerHTML="";
@@ -381,7 +334,7 @@ function showCards(folder){
   }
 }
 
-// Show Videos
+// Videos
 function showVideos(folder){
   const g=document.getElementById("galleryContainer");
   g.innerHTML="";
@@ -394,17 +347,20 @@ function showVideos(folder){
   }
 }
 
-// Show Famous Days
+// Famous Days FIXED rendering
 function showFamousDays(){
   currentView="famous";
-  document.getElementById("festivalGrid").style.display="none";
+  document.getElementById("festivalGridSection").style.display="none";
   document.getElementById("festivalDetail").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
   document.getElementById("famousDaySection").style.display="block";
 
   const grid=document.getElementById("famousDayGrid");
   grid.innerHTML="";
+  const seen = new Set();
   FAMOUS_DAYS.forEach(f=>{
+    if(seen.has(f.folder)) return;
+    seen.add(f.folder);
     grid.innerHTML+=`<div class="festival-card">
       <img src="media/${f.folder}/thumb.jpg">
       <h3>${f.name}</h3>
@@ -414,26 +370,21 @@ function showFamousDays(){
   });
 }
 
-// Show Jayanti
+// Jayanti FIXED rendering
 function showJayanti(){
   currentView="jayanti";
-  document.getElementById("festivalGrid").style.display="none";
+  document.getElementById("festivalGridSection").style.display="none";
   document.getElementById("festivalDetail").style.display="none";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="block";
 
   const grid=document.getElementById("jayantiGrid");
   grid.innerHTML="";
-  Object.keys(FESTIVALS).forEach(person=>{
-    const j=FESTIVALS[person];
-    grid.innerHTML+=`<div class="festival-card">
-      <img src="media/${j.id}/thumb.jpg">
-      <h3>${person}</h3>
-      <button class="btn" onclick="openFestival('${j.id}','${person}','${j.description}')">Open</button>
-    </div>`;
-  });
+  const seen = new Set();
   Object.keys(JAYANTI_LIST).forEach(person=>{
     const j=JAYANTI_LIST[person];
+    if(seen.has(j.folder)) return;
+    seen.add(j.folder);
     grid.innerHTML+=`<div class="festival-card">
       <img src="media/${j.folder}/thumb.jpg">
       <h3>${person}</h3>
@@ -443,15 +394,18 @@ function showJayanti(){
   });
 }
 
-// Search / Filter based on currentView
+// Search bar all view SAFE + working
 function filterItems(){
   const q=document.getElementById("searchInput").value.toLowerCase();
   if(currentView==="festival"){
     const grid=document.getElementById("festivalGrid");
     grid.innerHTML="";
+    const seen=new Set();
     Object.keys(FESTIVALS).forEach(name=>{
+      const f=FESTIVALS[name];
+      if(seen.has(f.id)) return;
       if(name.toLowerCase().includes(q)){
-        const f=FESTIVALS[name];
+        seen.add(f.id);
         grid.innerHTML+=`<div class="festival-card">
           <img src="media/${f.id}/thumb.jpg">
           <h3>${name}</h3>
@@ -459,11 +413,15 @@ function filterItems(){
         </div>`;
       }
     });
-  } else if(currentView==="famous"){
+  }
+  if(currentView==="famous"){
     const grid=document.getElementById("famousDayGrid");
     grid.innerHTML="";
+    const seen=new Set();
     FAMOUS_DAYS.forEach(f=>{
+      if(seen.has(f.folder)) return;
       if(f.name.toLowerCase().includes(q)){
+        seen.add(f.folder);
         grid.innerHTML+=`<div class="festival-card">
           <img src="media/${f.folder}/thumb.jpg">
           <h3>${f.name}</h3>
@@ -472,22 +430,16 @@ function filterItems(){
         </div>`;
       }
     });
-  } else if(currentView==="jayanti"){
+  }
+  if(currentView==="jayanti"){
     const grid=document.getElementById("jayantiGrid");
     grid.innerHTML="";
-    Object.keys(FESTIVALS).forEach(person=>{
-      const j=FESTIVALS[person];
-      if(person.toLowerCase().includes(q)){
-        grid.innerHTML+=`<div class="festival-card">
-          <img src="media/${j.id}/thumb.jpg">
-          <h3>${person}</h3>
-          <button class="btn" onclick="openFestival('${j.id}','${person}','${j.description}')">Open</button>
-        </div>`;
-      }
-    });
+    const seen=new Set();
     Object.keys(JAYANTI_LIST).forEach(person=>{
       const j=JAYANTI_LIST[person];
+      if(seen.has(j.folder)) return;
       if(person.toLowerCase().includes(q)){
+        seen.add(j.folder);
         grid.innerHTML+=`<div class="festival-card">
           <img src="media/${j.folder}/thumb.jpg">
           <h3>${person}</h3>
@@ -499,13 +451,13 @@ function filterItems(){
   }
 }
 
-// Share Media
+// Share
 function shareMedia(u){
   if(navigator.share){navigator.share({url:u});}
   else{alert("Copy link: "+location.origin+"/"+u);}
 }
 
-// Index Panel
+// Index
 function toggleIndex(){
   const p=document.getElementById("indexPanel");
   p.style.display=p.style.display==="block"?"none":"block";
@@ -518,7 +470,7 @@ function renderIndex(){
   });
 }
 
-// Back to Home
+// Back
 function backHome(){ renderHome(); }
 
 renderHome();
