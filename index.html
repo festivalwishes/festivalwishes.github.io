@@ -1,3 +1,4 @@
+```html
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,8 +19,6 @@
 <style>
 :root{
   --accent:#ff6b35;
-  --accent2:#ff3d81;
-  --accent3:#7c4dff;
   --card-bg:#ffffff;
   --radius:14px;
   --shadow:0 6px 18px rgba(0,0,0,0.08);
@@ -28,9 +27,8 @@ body{
   margin:0;
   font-family:Inter,sans-serif;
   background:
-    radial-gradient(circle at 10% 10%,rgba(255,221,0,0.20),transparent 25%),
-    radial-gradient(circle at 90% 20%,rgba(255,61,129,0.16),transparent 25%),
-    radial-gradient(circle at 50% 90%,rgba(124,77,255,0.14),transparent 30%),
+    radial-gradient(circle at 10% 10%,rgba(255,221,0,0.18),transparent 25%),
+    radial-gradient(circle at 90% 20%,rgba(255,105,180,0.15),transparent 25%),
     linear-gradient(135deg,#fff7e6,#ffe2d2,#fff0e9);
   min-height:100vh;
   color:#111;
@@ -45,12 +43,12 @@ header{
   position:sticky;
   top:0;
   z-index:20;
-  box-shadow:0 4px 14px rgba(0,0,0,0.15);
+  box-shadow:0 4px 14px rgba(0,0,0,0.1);
 }
 header .logo-text{
   font-size:28px;
   font-weight:800;
-  background:linear-gradient(90deg,#fff,#ffdd00,#fff,#ffd1dc,#fff);
+  background:linear-gradient(90deg,#fff,#ffdd00,#fff);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   text-shadow:0 0 14px rgba(255,255,255,0.6);
@@ -72,14 +70,8 @@ header .logo-text{
   width:65%;
   padding:10px 14px;
   border-radius:10px;
-  border:2px solid rgba(255,255,255,0.55);
+  border:1px solid rgba(0,0,0,0.12);
   font-size:16px;
-  outline:none;
-  box-shadow:0 3px 12px rgba(0,0,0,0.08);
-}
-.search-input:focus{
-  border-color:#ffdd00;
-  box-shadow:0 0 12px rgba(255,221,0,0.35);
 }
 .btn{
   background:linear-gradient(135deg,#ff6b35,#ff3d81);
@@ -90,17 +82,11 @@ header .logo-text{
   font-weight:600;
   margin-top:8px;
   cursor:pointer;
-  box-shadow:0 4px 10px rgba(255,61,129,0.18);
-  transition:0.2s ease-in-out;
-}
-.btn:hover{
-  transform:translateY(-2px);
-  box-shadow:0 7px 16px rgba(255,61,129,0.28);
 }
 .btn.alt{
-  background:linear-gradient(135deg,#ffffff,#fff4f8);
-  color:#7c2a5c;
-  border:1px solid rgba(255,61,129,0.22);
+  background:#fff;
+  color:#111;
+  border:1px solid rgba(0,0,0,0.1);
 }
 .festival-grid{
   display:grid;
@@ -117,9 +103,8 @@ header .logo-text{
   transition:0.2s ease-in-out;
 }
 .festival-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 24px rgba(124,77,255,0.16);
-  border-color:rgba(255,61,129,0.28);
+  transform:translateY(-3px);
+  box-shadow:0 10px 22px rgba(124,77,255,0.15);
 }
 .festival-card img{
   width:100%;
@@ -177,24 +162,22 @@ header .logo-text{
   z-index:100;
 }
 
-/* Visitor Counter */
+/* Small Visitor Counter */
 .visitor-counter{
   position:fixed;
-  bottom:18px;
-  right:18px;
+  bottom:8px;
+  right:8px;
   z-index:100;
-  background:linear-gradient(135deg,#ffffff,#fff0f6);
-  color:#7c2a5c;
-  border:2px solid rgba(255,61,129,0.28);
-  border-radius:24px;
-  padding:9px 14px;
-  box-shadow:0 5px 16px rgba(124,77,255,0.18);
-  font-size:14px;
-  font-weight:700;
-  display:flex;
-  align-items:center;
-  gap:6px;
-  min-height:20px;
+  background:rgba(255,255,255,0.75);
+  color:#777;
+  border:1px solid rgba(0,0,0,0.08);
+  border-radius:12px;
+  padding:3px 7px;
+  box-shadow:0 2px 6px rgba(0,0,0,0.08);
+  font-size:10px;
+  font-weight:600;
+  line-height:14px;
+  opacity:0.85;
 }
 .visitor-counter span{
   display:inline-block;
@@ -269,15 +252,14 @@ header .logo-text{
 </main>
 
 <div class="index-menu" onclick="toggleIndex()">☰</div>
-
 <div class="index-panel" id="indexPanel">
   <h3>Festival Index</h3>
   <div id="indexList"></div>
 </div>
 
-<!-- Visitor Counter -->
+<!-- Small Visitor Counter -->
 <div class="visitor-counter" id="visitorCounter">
-  👁️ <span>Visitors: </span>
+  👁️ <span>Visitors</span>
 </div>
 
 <script>
@@ -550,11 +532,12 @@ renderHome();
             background:transparent;
             border:0;
             box-shadow:none;
-            color:#7c2a5c;
+            color:#777;
             padding:0;
             margin:0;
-            font-size:14px;
-            font-weight:700;
+            font-size:10px;
+            font-weight:600;
+            line-height:14px;
           }
           #gcvc-for{
             display:none;
@@ -575,3 +558,4 @@ renderHome();
 
 </body>
 </html>
+```
