@@ -35,7 +35,7 @@ body{
   position:relative;
 }
 
-/* Automatic Festival Background */
+  /* Automatic Festival Background */
 body::before{
   content:"";
   position:fixed;
@@ -44,22 +44,17 @@ body::before{
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-  opacity:0.28;
+  opacity:0.55;
   z-index:-2;
   transition:background-image 0.8s ease-in-out;
 }
 
-/* Soft Overlay */
+/* Light Overlay */
 body::after{
   content:"";
   position:fixed;
   inset:0;
-  background:linear-gradient(
-    135deg,
-    rgba(255,247,230,0.80),
-    rgba(255,226,210,0.74),
-    rgba(255,240,233,0.80)
-  );
+  background:rgba(255,247,230,0.35);
   z-index:-1;
   pointer-events:none;
 }
