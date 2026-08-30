@@ -24,6 +24,7 @@
   --radius:14px;
   --shadow:0 6px 18px rgba(0,0,0,0.08);
 }
+
 body{
   margin:0;
   font-family:Inter,sans-serif;
@@ -43,7 +44,7 @@ body::before{
   background-size:cover;
   background-position:center;
   background-repeat:no-repeat;
-  opacity:0.30;
+  opacity:0.28;
   z-index:-2;
   transition:background-image 0.8s ease-in-out;
 }
@@ -55,9 +56,9 @@ body::after{
   inset:0;
   background:linear-gradient(
     135deg,
-    rgba(255,247,230,0.78),
-    rgba(255,226,210,0.72),
-    rgba(255,240,233,0.78)
+    rgba(255,247,230,0.80),
+    rgba(255,226,210,0.74),
+    rgba(255,240,233,0.80)
   );
   z-index:-1;
   pointer-events:none;
@@ -73,6 +74,7 @@ header{
   z-index:20;
   box-shadow:0 4px 14px rgba(0,0,0,0.1);
 }
+
 header .logo-text{
   font-size:28px;
   font-weight:800;
@@ -83,17 +85,20 @@ header .logo-text{
   margin-bottom:4px;
   cursor:pointer;
 }
+
 .toggle-buttons{
   display:flex;
   justify-content:center;
   gap:10px;
   margin:10px 0;
 }
+
 .search-box{
   display:flex;
   justify-content:center;
   margin-top:10px;
 }
+
 .search-input{
   width:65%;
   padding:10px 14px;
@@ -101,6 +106,7 @@ header .logo-text{
   border:1px solid rgba(0,0,0,0.12);
   font-size:16px;
 }
+
 .btn{
   background:linear-gradient(135deg,#ff6b35,#ff3d81);
   color:white;
@@ -111,17 +117,20 @@ header .logo-text{
   margin-top:8px;
   cursor:pointer;
 }
+
 .btn.alt{
   background:#fff;
   color:#111;
   border:1px solid rgba(0,0,0,0.1);
 }
+
 .festival-grid{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
   gap:18px;
   margin-top:14px;
 }
+
 .festival-card{
   background:rgba(255,255,255,0.94);
   border-radius:var(--radius);
@@ -130,22 +139,26 @@ header .logo-text{
   border:1px solid rgba(255,107,53,0.15);
   transition:0.2s ease-in-out;
 }
+
 .festival-card:hover{
   transform:translateY(-3px);
   box-shadow:0 10px 22px rgba(124,77,255,0.15);
 }
+
 .festival-card img{
   width:100%;
   height:90px;
   object-fit:cover;
   border-radius:10px;
 }
+
 .gallery{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
   gap:16px;
   padding:10px;
 }
+
 .media-box{
   background:rgba(255,255,255,0.95);
   padding:10px;
@@ -154,10 +167,13 @@ header .logo-text{
   text-align:center;
   border:1px solid rgba(124,77,255,0.10);
 }
-.media-box img, .media-box video{
+
+.media-box img,
+.media-box video{
   width:100%;
   border-radius:10px;
 }
+
 .index-menu{
   position:fixed;
   bottom:18px;
@@ -175,6 +191,7 @@ header .logo-text{
   box-shadow:var(--shadow);
   font-size:22px;
 }
+
 .index-panel{
   position:fixed;
   bottom:72px;
@@ -188,25 +205,6 @@ header .logo-text{
   box-shadow:var(--shadow);
   display:none;
   z-index:100;
-}
-
-/* Very Small Visitor Counter */
-.visitor-counter{
-  position:fixed;
-  bottom:4px;
-  right:4px;
-  z-index:100;
-  background:transparent;
-  color:#777;
-  padding:1px 3px;
-  font-size:8px;
-  font-weight:500;
-  line-height:10px;
-  opacity:0.55;
-  pointer-events:none;
-}
-.visitor-counter span{
-  display:inline;
 }
 </style>
 
@@ -226,12 +224,14 @@ header .logo-text{
   gtag('config', 'G-TB3Q8YZKLJ');
 </script>
 
-<!-- GoatCounter Visitor Tracking -->
+<!-- GoatCounter Visitor Tracking ONLY
+     No public visitor counter/widget -->
 
 <script data-goatcounter="https://jeetabhi.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 
 </head>
+
 <body>
 
 <header>
@@ -285,22 +285,22 @@ header .logo-text{
 </main>
 
 <div class="index-menu" onclick="toggleIndex()">☰</div>
+
 <div class="index-panel" id="indexPanel">
   <h3>Festival Index</h3>
   <div id="indexList"></div>
 </div>
 
-<!-- Very Small Visitor Counter -->
-
-<div class="visitor-counter" id="visitorCounter">
-  👁️ <span>Visitors</span>
-</div>
-
 <script>
+
 let currentFolder = "";
 let currentView = "festival"; // festival / famous / jayanti
 
-// Automatic Festival Background Dates for 2026
+
+/* =========================================
+   AUTOMATIC FESTIVAL BACKGROUND
+   ========================================= */
+
 const FESTIVAL_BACKGROUNDS = [
   {date:"2026-09-04",folder:"krushnajanmashtami"},
   {date:"2026-09-14",folder:"ganeshchaturthi"},
@@ -313,15 +313,17 @@ const FESTIVAL_BACKGROUNDS = [
   {date:"2027-01-14",folder:"makarsankranti"}
 ];
 
-// Set nearest upcoming festival image as website background
 function setFestivalBackground(){
+
   const today = new Date();
+
   const todayString =
     today.getFullYear()+"-"+
     String(today.getMonth()+1).padStart(2,"0")+"-"+
     String(today.getDate()).padStart(2,"0");
 
-  let selected = FESTIVAL_BACKGROUNDS.find(f=>f.date >= todayString);
+  let selected =
+    FESTIVAL_BACKGROUNDS.find(f=>f.date >= todayString);
 
   if(!selected){
     selected = FESTIVAL_BACKGROUNDS[0];
@@ -335,7 +337,11 @@ function setFestivalBackground(){
 
 setFestivalBackground();
 
-// Festival data SAFE + Makar Sankranti ADDED
+
+/* =========================================
+   FESTIVAL DATA
+   ========================================= */
+
 const FESTIVALS = {
   "Diwali":{id:"diwali",description:"Festival of Lights"},
   "Holi":{id:"holi",description:"Festival of Colours"},
@@ -363,7 +369,11 @@ const FESTIVALS = {
   "Chhatpuja":{id:"chhatpuja",description:"Chhat Mata"}
 };
 
-// Famous days data SAFE (not deleted)
+
+/* =========================================
+   FAMOUS DAYS DATA
+   ========================================= */
+
 const FAMOUS_DAYS = [
   {name:"Maharashtra Day",folder:"maharashtraday",date:"May 1",description:"Jai Maharashtra"},
   {name:"Mother's Day",folder:"motherday",date:"May 12",description:"Love You Mom"},
@@ -375,7 +385,11 @@ const FAMOUS_DAYS = [
   {name:"Independence Day of India",folder:"independence",date:"August 15",description:"Proud to be Indian"}
 ];
 
-// Jayanti list SAFE (not deleted, rendering fixed)
+
+/* =========================================
+   JAYANTI LIST
+   ========================================= */
+
 const JAYANTI_LIST = {
   "Swami Vivekananda":{folder:"vivekananda",date:"January 12"},
   "Netaji Subhash Chandra Bose":{folder:"subhashbose",date:"January 23"},
@@ -393,33 +407,60 @@ const JAYANTI_LIST = {
   "Atal Bihari Vajpayee":{folder:"vajpayee",date:"December 25"}
 };
 
-// Home render FIX (section safe)
+
+/* =========================================
+   HOME RENDER
+   ========================================= */
+
 function renderHome(){
+
   currentView="festival";
+
   document.getElementById("festivalGridSection").style.display="block";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
   document.getElementById("festivalDetail").style.display="none";
 
   const grid=document.getElementById("festivalGrid");
+
   grid.innerHTML="";
+
   const seen = new Set();
+
   Object.keys(FESTIVALS).forEach(name=>{
+
     const f=FESTIVALS[name];
+
     if(seen.has(f.id)) return;
+
     seen.add(f.id);
+
     grid.innerHTML+=`<div class="festival-card">
+
       <img src="media/${f.id}/thumb.jpg">
+
       <h3>${name}</h3>
-      <button class="btn" onclick="openFestival('${f.id}','${name}','${f.description}')">Open</button>
+
+      <button class="btn"
+        onclick="openFestival('${f.id}','${name}','${f.description}')">
+        Open
+      </button>
+
     </div>`;
   });
+
   renderIndex();
 }
 
-// Open media folder
+
+/* =========================================
+   OPEN MEDIA FOLDER
+   ========================================= */
+
 function openFestival(folder,title,desc){
+
   currentFolder = folder;
+
   document.getElementById("festivalGridSection").style.display="none";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
@@ -427,202 +468,345 @@ function openFestival(folder,title,desc){
 
   document.getElementById("festivalTitle").innerText=title;
   document.getElementById("festivalDesc").innerText=desc;
+
   showCards(folder);
 }
 
-// Cards
+
+/* =========================================
+   CARDS
+   ========================================= */
+
 function showCards(folder){
+
   const g=document.getElementById("galleryContainer");
+
   g.innerHTML="";
+
   for(let i=1;i<=10;i++){
+
     g.innerHTML+=`<div class="media-box">
+
       <img src="media/${folder}/card${i}.jpg">
-      <a href="media/${folder}/card${i}.jpg" download class="btn">Download</a>
-      <button onclick="shareMedia('media/${folder}/card${i}.jpg')" class="btn alt">Share</button>
+
+      <a href="media/${folder}/card${i}.jpg"
+         download
+         class="btn">
+         Download
+      </a>
+
+      <button
+        onclick="shareMedia('media/${folder}/card${i}.jpg')"
+        class="btn alt">
+        Share
+      </button>
+
     </div>`;
   }
 }
 
-// Videos
+
+/* =========================================
+   VIDEOS
+   ========================================= */
+
 function showVideos(folder){
+
   const g=document.getElementById("galleryContainer");
+
   g.innerHTML="";
+
   for(let i=1;i<=10;i++){
+
     g.innerHTML+=`<div class="media-box">
-      <video controls><source src="media/${folder}/video${i}.mp4"></video>
-      <a href="media/${folder}/video${i}.mp4" download class="btn">Download</a>
-      <button onclick="shareMedia('media/${folder}/video${i}.mp4')" class="btn alt">Share</button>
+
+      <video controls>
+        <source src="media/${folder}/video${i}.mp4">
+      </video>
+
+      <a href="media/${folder}/video${i}.mp4"
+         download
+         class="btn">
+         Download
+      </a>
+
+      <button
+        onclick="shareMedia('media/${folder}/video${i}.mp4')"
+        class="btn alt">
+        Share
+      </button>
+
     </div>`;
   }
 }
 
-// Famous Days FIXED rendering
+
+/* =========================================
+   FAMOUS DAYS
+   ========================================= */
+
 function showFamousDays(){
+
   currentView="famous";
+
   document.getElementById("festivalGridSection").style.display="none";
   document.getElementById("festivalDetail").style.display="none";
   document.getElementById("jayantiSection").style.display="none";
   document.getElementById("famousDaySection").style.display="block";
 
   const grid=document.getElementById("famousDayGrid");
+
   grid.innerHTML="";
+
   const seen = new Set();
+
   FAMOUS_DAYS.forEach(f=>{
+
     if(seen.has(f.folder)) return;
+
     seen.add(f.folder);
+
     grid.innerHTML+=`<div class="festival-card">
+
       <img src="media/${f.folder}/thumb.jpg">
+
       <h3>${f.name}</h3>
+
       <p>${f.date}</p>
-      <button class="btn" onclick="openFestival('${f.folder}','${f.name}','${f.description}')">Open</button>
+
+      <button class="btn"
+        onclick="openFestival('${f.folder}','${f.name}','${f.description}')">
+        Open
+      </button>
+
     </div>`;
   });
 }
 
-// Jayanti FIXED rendering
+
+/* =========================================
+   JAYANTI
+   ========================================= */
+
 function showJayanti(){
+
   currentView="jayanti";
+
   document.getElementById("festivalGridSection").style.display="none";
   document.getElementById("festivalDetail").style.display="none";
   document.getElementById("famousDaySection").style.display="none";
   document.getElementById("jayantiSection").style.display="block";
 
   const grid=document.getElementById("jayantiGrid");
+
   grid.innerHTML="";
+
   const seen = new Set();
+
   Object.keys(JAYANTI_LIST).forEach(person=>{
+
     const j=JAYANTI_LIST[person];
+
     if(seen.has(j.folder)) return;
+
     seen.add(j.folder);
+
     grid.innerHTML+=`<div class="festival-card">
+
       <img src="media/${j.folder}/thumb.jpg">
+
       <h3>${person}</h3>
+
       <p>${j.date}</p>
-      <button class="btn" onclick="openFestival('${j.folder}','${person} Jayanti','Birthday: ${j.date}')">Open</button>
+
+      <button class="btn"
+        onclick="openFestival('${j.folder}','${person} Jayanti','Birthday: ${j.date}')">
+        Open
+      </button>
+
     </div>`;
   });
 }
 
-// Search bar all view SAFE + working
+
+/* =========================================
+   SEARCH
+   ========================================= */
+
 function filterItems(){
-  const q=document.getElementById("searchInput").value.toLowerCase();
+
+  const q=document
+    .getElementById("searchInput")
+    .value
+    .toLowerCase();
+
   if(currentView==="festival"){
+
     const grid=document.getElementById("festivalGrid");
+
     grid.innerHTML="";
+
     const seen=new Set();
+
     Object.keys(FESTIVALS).forEach(name=>{
+
       const f=FESTIVALS[name];
+
       if(seen.has(f.id)) return;
+
       if(name.toLowerCase().includes(q)){
+
         seen.add(f.id);
+
         grid.innerHTML+=`<div class="festival-card">
+
           <img src="media/${f.id}/thumb.jpg">
+
           <h3>${name}</h3>
-          <button class="btn" onclick="openFestival('${f.id}','${name}','${f.description}')">Open</button>
+
+          <button class="btn"
+            onclick="openFestival('${f.id}','${name}','${f.description}')">
+            Open
+          </button>
+
         </div>`;
       }
     });
   }
+
   if(currentView==="famous"){
+
     const grid=document.getElementById("famousDayGrid");
+
     grid.innerHTML="";
+
     const seen=new Set();
+
     FAMOUS_DAYS.forEach(f=>{
+
       if(seen.has(f.folder)) return;
+
       if(f.name.toLowerCase().includes(q)){
+
         seen.add(f.folder);
+
         grid.innerHTML+=`<div class="festival-card">
+
           <img src="media/${f.folder}/thumb.jpg">
+
           <h3>${f.name}</h3>
+
           <p>${f.date}</p>
-          <button class="btn" onclick="openFestival('${f.folder}','${f.name}','${f.description}')">Open</button>
+
+          <button class="btn"
+            onclick="openFestival('${f.folder}','${f.name}','${f.description}')">
+            Open
+          </button>
+
         </div>`;
       }
     });
   }
+
   if(currentView==="jayanti"){
+
     const grid=document.getElementById("jayantiGrid");
+
     grid.innerHTML="";
+
     const seen=new Set();
+
     Object.keys(JAYANTI_LIST).forEach(person=>{
+
       const j=JAYANTI_LIST[person];
+
       if(seen.has(j.folder)) return;
+
       if(person.toLowerCase().includes(q)){
+
         seen.add(j.folder);
+
         grid.innerHTML+=`<div class="festival-card">
+
           <img src="media/${j.folder}/thumb.jpg">
+
           <h3>${person}</h3>
+
           <p>${j.date}</p>
-          <button class="btn" onclick="openFestival('${j.folder}','${person} Jayanti','Birthday: ${j.date}')">Open</button>
+
+          <button class="btn"
+            onclick="openFestival('${j.folder}','${person} Jayanti','Birthday: ${j.date}')">
+            Open
+          </button>
+
         </div>`;
       }
     });
   }
 }
 
-// Share
+
+/* =========================================
+   SHARE
+   ========================================= */
+
 function shareMedia(u){
-  if(navigator.share){navigator.share({url:u});}
-  else{alert("Copy link: "+location.origin+"/"+u);}
+
+  if(navigator.share){
+    navigator.share({url:u});
+  }
+  else{
+    alert("Copy link: "+location.origin+"/"+u);
+  }
 }
 
-// Index
+
+/* =========================================
+   INDEX
+   ========================================= */
+
 function toggleIndex(){
+
   const p=document.getElementById("indexPanel");
-  p.style.display=p.style.display==="block"?"none":"block";
+
+  p.style.display=
+    p.style.display==="block"
+    ?"none"
+    :"block";
 }
+
 function renderIndex(){
+
   const list=document.getElementById("indexList");
+
   list.innerHTML="";
+
   Object.keys(FESTIVALS).forEach(name=>{
-    list.innerHTML+=`<button class="btn alt" onclick="openFestival('${FESTIVALS[name].id}','${name}','${FESTIVALS[name].description}')">${name}</button>`;
+
+    list.innerHTML+=`<button
+      class="btn alt"
+      onclick="openFestival('${FESTIVALS[name].id}','${name}','${FESTIVALS[name].description}')">
+      ${name}
+    </button>`;
   });
 }
 
-// Back
-function backHome(){ renderHome(); }
+
+/* =========================================
+   BACK
+   ========================================= */
+
+function backHome(){
+  renderHome();
+}
+
+
+/* =========================================
+   START
+   ========================================= */
 
 renderHome();
 
-/* GoatCounter Visitor Counter */
-(function(){
-  var t = setInterval(function(){
-    if(window.goatcounter && window.goatcounter.visit_count){
-      clearInterval(t);
-      window.goatcounter.visit_count({
-        append:"#visitorCounter",
-        path:"TOTAL",
-        no_branding:true,
-        attr:{
-          class:"goatcounter-total"
-        },
-        style:`
-          div{
-            background:transparent;
-            border:0;
-            box-shadow:none;
-            color:#777;
-            padding:0;
-            margin:0;
-            font-size:8px;
-            font-weight:500;
-            line-height:10px;
-          }
-          #gcvc-for{
-            display:none;
-          }
-          #gcvc-views{
-            color:#777;
-            font-weight:600;
-          }
-          #gcvc-by{
-            display:none;
-          }
-        `
-      });
-    }
-  },100);
-})();
 </script>
 
 </body>
