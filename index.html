@@ -18,6 +18,8 @@
 <style>
 :root{
   --accent:#ff6b35;
+  --accent2:#ff3d81;
+  --accent3:#7c4dff;
   --card-bg:#ffffff;
   --radius:14px;
   --shadow:0 6px 18px rgba(0,0,0,0.08);
@@ -25,7 +27,11 @@
 body{
   margin:0;
   font-family:Inter,sans-serif;
-  background:linear-gradient(135deg,#fff7e6,#ffe2d2,#fff0e9);
+  background:
+    radial-gradient(circle at 10% 10%,rgba(255,221,0,0.20),transparent 25%),
+    radial-gradient(circle at 90% 20%,rgba(255,61,129,0.16),transparent 25%),
+    radial-gradient(circle at 50% 90%,rgba(124,77,255,0.14),transparent 30%),
+    linear-gradient(135deg,#fff7e6,#ffe2d2,#fff0e9);
   min-height:100vh;
   color:#111;
   overflow-x:hidden;
@@ -34,17 +40,17 @@ body{
 header{
   text-align:center;
   padding:18px;
-  background:var(--accent);
+  background:linear-gradient(135deg,#ff6b35,#ff3d81,#7c4dff);
   color:white;
   position:sticky;
   top:0;
   z-index:20;
-  box-shadow:0 4px 14px rgba(0,0,0,0.1);
+  box-shadow:0 4px 14px rgba(0,0,0,0.15);
 }
 header .logo-text{
   font-size:28px;
   font-weight:800;
-  background:linear-gradient(90deg,#fff,#ffdd00,#fff);
+  background:linear-gradient(90deg,#fff,#ffdd00,#fff,#ffd1dc,#fff);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   text-shadow:0 0 14px rgba(255,255,255,0.6);
@@ -66,11 +72,17 @@ header .logo-text{
   width:65%;
   padding:10px 14px;
   border-radius:10px;
-  border:1px solid rgba(0,0,0,0.12);
+  border:2px solid rgba(255,255,255,0.55);
   font-size:16px;
+  outline:none;
+  box-shadow:0 3px 12px rgba(0,0,0,0.08);
+}
+.search-input:focus{
+  border-color:#ffdd00;
+  box-shadow:0 0 12px rgba(255,221,0,0.35);
 }
 .btn{
-  background:var(--accent);
+  background:linear-gradient(135deg,#ff6b35,#ff3d81);
   color:white;
   border:none;
   padding:8px 14px;
@@ -78,11 +90,17 @@ header .logo-text{
   font-weight:600;
   margin-top:8px;
   cursor:pointer;
+  box-shadow:0 4px 10px rgba(255,61,129,0.18);
+  transition:0.2s ease-in-out;
+}
+.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 7px 16px rgba(255,61,129,0.28);
 }
 .btn.alt{
-  background:#fff;
-  color:#111;
-  border:1px solid rgba(0,0,0,0.1);
+  background:linear-gradient(135deg,#ffffff,#fff4f8);
+  color:#7c2a5c;
+  border:1px solid rgba(255,61,129,0.22);
 }
 .festival-grid{
   display:grid;
@@ -91,11 +109,17 @@ header .logo-text{
   margin-top:14px;
 }
 .festival-card{
-  background:var(--card-bg);
+  background:linear-gradient(145deg,#ffffff,#fff8fb);
   border-radius:var(--radius);
   padding:12px;
   box-shadow:var(--shadow);
+  border:1px solid rgba(255,107,53,0.12);
   transition:0.2s ease-in-out;
+}
+.festival-card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 24px rgba(124,77,255,0.16);
+  border-color:rgba(255,61,129,0.28);
 }
 .festival-card img{
   width:100%;
@@ -110,11 +134,12 @@ header .logo-text{
   padding:10px;
 }
 .media-box{
-  background:white;
+  background:linear-gradient(145deg,#ffffff,#fff8fb);
   padding:10px;
   border-radius:14px;
   box-shadow:var(--shadow);
   text-align:center;
+  border:1px solid rgba(124,77,255,0.10);
 }
 .media-box img, .media-box video{
   width:100%;
@@ -124,7 +149,7 @@ header .logo-text{
   position:fixed;
   bottom:18px;
   left:18px;
-  background:var(--accent);
+  background:linear-gradient(135deg,#ff6b35,#ff3d81,#7c4dff);
   color:white;
   width:46px;
   height:46px;
@@ -151,6 +176,29 @@ header .logo-text{
   display:none;
   z-index:100;
 }
+
+/* Visitor Counter */
+.visitor-counter{
+  position:fixed;
+  bottom:18px;
+  right:18px;
+  z-index:100;
+  background:linear-gradient(135deg,#ffffff,#fff0f6);
+  color:#7c2a5c;
+  border:2px solid rgba(255,61,129,0.28);
+  border-radius:24px;
+  padding:9px 14px;
+  box-shadow:0 5px 16px rgba(124,77,255,0.18);
+  font-size:14px;
+  font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-height:20px;
+}
+.visitor-counter span{
+  display:inline-block;
+}
 </style>
 
 <!-- Google Ads -->
@@ -165,6 +213,10 @@ header .logo-text{
   gtag('js', new Date());
   gtag('config', 'G-TB3Q8YZKLJ');
 </script>
+
+<!-- GoatCounter Visitor Tracking -->
+<script data-goatcounter="https://jeetabhi.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 
 </head>
 <body>
@@ -217,9 +269,15 @@ header .logo-text{
 </main>
 
 <div class="index-menu" onclick="toggleIndex()">☰</div>
+
 <div class="index-panel" id="indexPanel">
   <h3>Festival Index</h3>
   <div id="indexList"></div>
+</div>
+
+<!-- Visitor Counter -->
+<div class="visitor-counter" id="visitorCounter">
+  👁️ <span>Visitors: </span>
 </div>
 
 <script>
@@ -474,6 +532,45 @@ function renderIndex(){
 function backHome(){ renderHome(); }
 
 renderHome();
+
+/* GoatCounter Visitor Counter */
+(function(){
+  var t = setInterval(function(){
+    if(window.goatcounter && window.goatcounter.visit_count){
+      clearInterval(t);
+      window.goatcounter.visit_count({
+        append:"#visitorCounter",
+        path:"TOTAL",
+        no_branding:true,
+        attr:{
+          class:"goatcounter-total"
+        },
+        style:`
+          div{
+            background:transparent;
+            border:0;
+            box-shadow:none;
+            color:#7c2a5c;
+            padding:0;
+            margin:0;
+            font-size:14px;
+            font-weight:700;
+          }
+          #gcvc-for{
+            display:none;
+          }
+          #gcvc-views{
+            color:#ff3d81;
+            font-weight:800;
+          }
+          #gcvc-by{
+            display:none;
+          }
+        `
+      });
+    }
+  },100);
+})();
 </script>
 
 </body>
